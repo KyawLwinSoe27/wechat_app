@@ -1,0 +1,10 @@
+import 'package:flutter/material.dart';
+const Color BACKGROUND_COLOR = Color.fromRGBO(245, 245, 245, 1);
+const Color PRIMARY_COLOR = Color.fromRGBO(17, 58, 93, 1);
+const Color BUTTON_COLOR = Color.fromRGBO(17, 58, 93, 1);
+const Color PRIMARY_COLOR_7 = Color.fromRGBO(17, 58, 93, 0.7);
+const Color TRANSPARENT_COLOR = Colors.transparent;
+const Color PURE_WHITE_COLOR = Color.fromRGBO(255, 255, 255, 1);
+const Color GREY_COLOR = Color.fromRGBO(153,153,153,1);
+const Color HINT_TEXT_COLOR = Color.fromRGBO(6, 39, 67, 1);
+const Color FAVOURITE_COLOR = Color.fromRGBO(243, 13, 52, 1);

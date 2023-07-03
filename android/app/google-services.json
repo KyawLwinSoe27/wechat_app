@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "402467754134",
+    "project_id": "wechat-c400b",
+    "storage_bucket": "wechat-c400b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:402467754134:android:b24812e84f8688d0f272b7",
+        "android_client_info": {
+          "package_name": "com.example.we_chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "402467754134-2uvfnl4c819jnv9nbkt979moqu1ejrju.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRwrpbdKvRKY72BAxc6emOyFYDuEbKpj8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "402467754134-2uvfnl4c819jnv9nbkt979moqu1ejrju.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
