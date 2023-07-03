@@ -45,7 +45,7 @@ class RegisterScreen extends StatelessWidget {
                   subTitleText: "Create a new account",
                 ),
                 const SizedBox(
-                  height: MARGIN_LEVEL_4_LAST,
+                  height: MARGIN_LEVEL_4_MIDDLE,
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -53,6 +53,28 @@ class RegisterScreen extends StatelessWidget {
                   width: MediaQuery.of(context).size.width / 1.5,
                   child: const InputTextField(
                     labelName: TEXT_FIELD_NAME,
+                  ),
+                ),
+                const SizedBox(
+                  height: MARGIN_LEVEL_1_MIDDLE,
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: MARGIN_LEVEL_1_LAST),
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  child: const InputTextField(
+                    labelName: TEXT_FIELD_EMAIL,
+                  ),
+                ),
+                const SizedBox(
+                  height: MARGIN_LEVEL_1_MIDDLE,
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: MARGIN_LEVEL_1_LAST),
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  child: const InputTextField(
+                    labelName: TEXT_FIELD_PHONENUMBER,
                   ),
                 ),
                 const SizedBox(

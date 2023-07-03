@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:we_chat_app/pages/get_otp_screen.dart';
+import 'package:we_chat_app/pages/home_screen.dart';
 import 'package:we_chat_app/resources/colors.dart';
 import 'package:we_chat_app/resources/dimensions.dart';
 import 'package:we_chat_app/resources/images.dart';
@@ -46,6 +47,13 @@ class LoginScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.only(left:30,right: 30),
               child: const InputTextField(
+                labelName: ENTER_YOUR_EMAIL,
+              ),
+            ),
+            const SizedBox(height: MARGIN_LEVEL_1_MIDDLE,),
+            Container(
+              padding: const EdgeInsets.only(left:30,right: 30),
+              child: const InputTextField(
                 labelName: ENTER_YOUR_PASSWORD,
               ),
             ),
@@ -66,7 +74,7 @@ class LoginScreen extends StatelessWidget {
             ),
             Center(
               child: InkWell(
-                onTap: () => navigateToScreen(context, GetOTPScreen()),
+                onTap: () => navigateToScreen(context,const HomeScreen()),
                 child:const PrimaryButton(
                     buttonName: "Login",
                     borderColor: TRANSPARENT_COLOR,

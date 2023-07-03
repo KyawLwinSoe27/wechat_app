@@ -33,101 +33,103 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: BACKGROUND_COLOR,
-        body: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 1.14,
-              child: IndexedStack(
-                index: _currentIndex,
-                children: _pages,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 1.14,
+                child: IndexedStack(
+                  index: _currentIndex,
+                  children: _pages,
+                ),
               ),
-            ),
-            Container(
-              padding:const EdgeInsets.only(top: MARGIN_LEVEL_1_LAST),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Spacer(),
-                  InkWell(onTap: () {
-                    setState(() {
-                      _currentIndex = 0;
-                    });
-                  },
-                    child: Column(
-                      children: [
-                        Image.asset(_currentIndex == 0 ? MOMENT_BOTTOM_BAR_ACTIVE_ICON : MOMENT_BOTTOM_BAR_INACTIVE_ICON),
-                        const SizedBox(height: MARGIN_LEVEL_1_7,),
-                        Text("Moments", style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: _currentIndex == 0 ? activeColor : inActiveColor),)
-                      ],
-                    ),
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    onTap: () {
+              Container(
+                padding:const EdgeInsets.only(top: MARGIN_LEVEL_1_LAST),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Spacer(),
+                    InkWell(onTap: () {
                       setState(() {
-                        _currentIndex = 1;
+                        _currentIndex = 0;
                       });
                     },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(_currentIndex == 1 ? CHAT_BOTTOM_BAR_ACTIVE_ICON : CHAT_BOTTOM_BAR_INACTIVE_ICON),
-                        const SizedBox(height: MARGIN_LEVEL_1_7,),
-                        Text("Chats",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: _currentIndex == 1 ? activeColor : inActiveColor))
-                      ],
+                      child: Column(
+                        children: [
+                          Image.asset(_currentIndex == 0 ? MOMENT_BOTTOM_BAR_ACTIVE_ICON : MOMENT_BOTTOM_BAR_INACTIVE_ICON),
+                          const SizedBox(height: MARGIN_LEVEL_1_7,),
+                          Text("Moments", style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: _currentIndex == 0 ? activeColor : inActiveColor),)
+                        ],
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        _currentIndex = 2;
-                      });
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(_currentIndex == 2 ? CONTACTS_BOTTOM_BAR_ACTIVE_ICON : CONTACTS_BOTTOM_BAR_INACTIVE_ICON),
-                        const SizedBox(height: MARGIN_LEVEL_1_7,),
-                        Text("Contacts", style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: _currentIndex == 2 ? activeColor : inActiveColor))
-                      ],
+                    const Spacer(),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          _currentIndex = 1;
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(_currentIndex == 1 ? CHAT_BOTTOM_BAR_ACTIVE_ICON : CHAT_BOTTOM_BAR_INACTIVE_ICON),
+                          const SizedBox(height: MARGIN_LEVEL_1_7,),
+                          Text("Chats",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: _currentIndex == 1 ? activeColor : inActiveColor))
+                        ],
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        _currentIndex = 3;
-                      });
-                    },
-                    child: Column(
-                      children: [
-                        Image.asset(_currentIndex == 3 ? PROFILE_BOTTOM_BAR_ACTIVE_ICON : PROFILE_BOTTOM_BAR_INACTIVE_ICON),
-                        const SizedBox(height: MARGIN_LEVEL_1_7,),
-                        Text("Me", style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: _currentIndex == 3 ? activeColor : inActiveColor))
-                      ],
+                    const Spacer(),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          _currentIndex = 2;
+                        });
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(_currentIndex == 2 ? CONTACTS_BOTTOM_BAR_ACTIVE_ICON : CONTACTS_BOTTOM_BAR_INACTIVE_ICON),
+                          const SizedBox(height: MARGIN_LEVEL_1_7,),
+                          Text("Contacts", style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: _currentIndex == 2 ? activeColor : inActiveColor))
+                        ],
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        _currentIndex = 4;
-                      });
-                    },
-                    child: Column(
-                      children: [
-                        Image.asset(_currentIndex == 4 ? SETTING_BOTTOM_BAR_ACTIVE_ICON : SETTING_BOTTOM_BAR_INACTIVE_ICON),
-                        const SizedBox(height: MARGIN_LEVEL_1_7,),
-                        Text("Setting", style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: _currentIndex == 4 ? activeColor : inActiveColor))
-                      ],
+                    const Spacer(),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          _currentIndex = 3;
+                        });
+                      },
+                      child: Column(
+                        children: [
+                          Image.asset(_currentIndex == 3 ? PROFILE_BOTTOM_BAR_ACTIVE_ICON : PROFILE_BOTTOM_BAR_INACTIVE_ICON),
+                          const SizedBox(height: MARGIN_LEVEL_1_7,),
+                          Text("Me", style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: _currentIndex == 3 ? activeColor : inActiveColor))
+                        ],
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-            )
-          ],
+                    const Spacer(),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          _currentIndex = 4;
+                        });
+                      },
+                      child: Column(
+                        children: [
+                          Image.asset(_currentIndex == 4 ? SETTING_BOTTOM_BAR_ACTIVE_ICON : SETTING_BOTTOM_BAR_INACTIVE_ICON),
+                          const SizedBox(height: MARGIN_LEVEL_1_7,),
+                          Text("Setting", style: TextStyle(fontWeight: FontWeight.w700,fontSize: 12,color: _currentIndex == 4 ? activeColor : inActiveColor))
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
         // bottomNavigationBar: BottomNavigationBar(
         //   selectedItemColor: PRIMARY_COLOR,

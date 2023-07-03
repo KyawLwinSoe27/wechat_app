@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:we_chat_app/pages/get_otp_screen.dart';
 import 'package:we_chat_app/pages/login_screen.dart';
 import 'package:we_chat_app/resources/colors.dart';
 import 'package:we_chat_app/resources/dimensions.dart';
@@ -64,11 +65,14 @@ class RowButton extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const PrimaryButton(
-          buttonName: 'Sign Up',
-          borderColor: BUTTON_COLOR,
-          buttonColor: TRANSPARENT_COLOR,
-          textColor: BUTTON_COLOR,
+        InkWell(
+          onTap: () => navigateToScreen(context,GetOTPScreen()),
+          child: const PrimaryButton(
+            buttonName: 'Sign Up',
+            borderColor: BUTTON_COLOR,
+            buttonColor: TRANSPARENT_COLOR,
+            textColor: BUTTON_COLOR,
+          ),
         ),
         const SizedBox(width: MARGIN_LEVEL_1_MIDDLE,),
         InkWell(
