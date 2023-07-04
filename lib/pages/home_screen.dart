@@ -3,6 +3,7 @@ import 'package:we_chat_app/pages/chat_screen.dart';
 import 'package:we_chat_app/pages/contacts_screen.dart';
 import 'package:we_chat_app/pages/moments_screen.dart';
 import 'package:we_chat_app/pages/profile_screen.dart';
+import 'package:we_chat_app/pages/settings_screen.dart';
 import 'package:we_chat_app/resources/colors.dart';
 import 'package:we_chat_app/resources/dimensions.dart';
 import 'package:we_chat_app/resources/images.dart';
@@ -20,8 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
     const MomentsScreen(),
     const ChatScreen(),
     const ContactsScreen(),
-    const ProfileScreen(),
-    const ProfileScreen(),
+    ProfileScreen(),
+    const SettingsScreen(),
   ];
 
   Color activeColor = PRIMARY_COLOR;

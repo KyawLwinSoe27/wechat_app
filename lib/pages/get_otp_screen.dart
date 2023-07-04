@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 import 'package:pin_code_text_field/pin_code_text_field.dart';
 import 'package:provider/provider.dart';
 import 'package:we_chat_app/blocs/get_otp_bloc.dart';
-import 'package:we_chat_app/pages/home_screen.dart';
 import 'package:we_chat_app/pages/register_screen.dart';
 import 'package:we_chat_app/resources/colors.dart';
 import 'package:we_chat_app/resources/dimensions.dart';
@@ -22,6 +20,7 @@ class GetOTPScreen extends StatelessWidget {
 
   final TextEditingController textEditingControllerForOTP =
       TextEditingController();
+  final TextEditingController textEditingControllerPhoneNumber = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,8 +69,8 @@ class GetOTPScreen extends StatelessWidget {
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
-                            child: const InputTextField(
-                              labelName: ENTER_YOUR_PHONE_NUMBER,
+                            child: InputTextField(
+                              labelName: ENTER_YOUR_PHONE_NUMBER, onChanged: (String val) {  }, textEditingController: textEditingControllerPhoneNumber,
                             ),
                           ),
                           const SizedBox(
@@ -144,8 +143,8 @@ class GetOTPScreen extends StatelessWidget {
                         child: InkWell(
                           onTap: () async{
                            bloc.onTapVerify();
-                           await Future.delayed(const Duration(milliseconds: 500));
-                           bloc.isOTPCorrect! ? navigateToScreen(context, const RegisterScreen()) : showSnackBarWithMessage(context, "false");
+                           await Future.delayed(const Duration(milliseconds: 1000));
+                           bloc.isOTPCorrect! ? navigateToScreen(context, RegisterScreen()) : showSnackBarWithMessage(context, "false");
                           },
                           child: const PrimaryButton(
                               buttonName: "Verify",

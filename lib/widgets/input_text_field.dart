@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import '../resources/colors.dart';
 class InputTextField extends StatelessWidget {
   final String labelName;
+  final Function(String) onChanged;
+  final TextEditingController textEditingController;
   const InputTextField({
     super.key,
     required this.labelName,
+    required this.onChanged,
+    required this.textEditingController,
   });
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +26,10 @@ class InputTextField extends StatelessWidget {
         labelText: labelName,
         labelStyle:const TextStyle(color: Colors.grey),
       ),
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.text,
       textInputAction: TextInputAction.done,
+      controller: textEditingController,
+      onChanged: (val) => onChanged(val),
     );
   }
 }

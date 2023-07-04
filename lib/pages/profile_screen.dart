@@ -9,7 +9,10 @@ import 'package:we_chat_app/widgets/input_text_field.dart';
 import 'package:we_chat_app/widgets/primary_button.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  ProfileScreen({Key? key}) : super(key: key);
+
+  final TextEditingController textEditingControllerName = TextEditingController();
+  final TextEditingController textEditingControllerPhoneNumber = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +36,14 @@ class ProfileScreen extends StatelessWidget {
                       content: SingleChildScrollView(
                         child: Column(
                           children: [
-                            const InputTextField(
-                              labelName: 'Name',
+                             InputTextField(
+                              labelName: 'Name', onChanged: (String val) {  }, textEditingController: textEditingControllerName,
                             ),
                             const SizedBox(
                               height: MARGIN_LEVEL_1_MIDDLE,
                             ),
-                            const InputTextField(
-                              labelName: 'Phone Number',
+                             InputTextField(
+                              labelName: 'Phone Number', onChanged: (String val) {  }, textEditingController: textEditingControllerPhoneNumber,
                             ),
                             const SizedBox(
                               height: MARGIN_LEVEL_1_LAST,

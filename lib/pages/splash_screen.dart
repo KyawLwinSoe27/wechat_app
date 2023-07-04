@@ -76,7 +76,7 @@ class RowButton extends StatelessWidget {
         ),
         const SizedBox(width: MARGIN_LEVEL_1_MIDDLE,),
         InkWell(
-          onTap: () => navigateToScreen(context,const LoginScreen()),
+          onTap: () => navigateToScreen(context, LoginScreen()),
           child: const PrimaryButton(
             buttonName: 'Login',
             borderColor: TRANSPARENT_COLOR,

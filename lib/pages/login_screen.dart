@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:we_chat_app/pages/get_otp_screen.dart';
 import 'package:we_chat_app/pages/home_screen.dart';
 import 'package:we_chat_app/resources/colors.dart';
 import 'package:we_chat_app/resources/dimensions.dart';
@@ -12,7 +11,12 @@ import 'package:we_chat_app/widgets/sub_title_text.dart';
 import 'package:we_chat_app/widgets/title_text.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({Key? key}) : super(key: key);
+
+  final TextEditingController textEditingControllerEmail = TextEditingController();
+  final TextEditingController textEditingControllerPhoneNumber = TextEditingController();
+  final TextEditingController textEditingControllerPassword = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,22 +43,22 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(height: MARGIN_LEVEL_2_MIDDLE,),
             Container(
               padding: const EdgeInsets.only(left:30,right: 30),
-              child: const InputTextField(
-                labelName: ENTER_YOUR_PHONE_NUMBER,
+              child: InputTextField(
+                labelName: ENTER_YOUR_PHONE_NUMBER, onChanged: (String val) {  }, textEditingController: textEditingControllerPhoneNumber,
               ),
             ),
             const SizedBox(height: MARGIN_LEVEL_1_MIDDLE,),
             Container(
               padding: const EdgeInsets.only(left:30,right: 30),
-              child: const InputTextField(
-                labelName: ENTER_YOUR_EMAIL,
+              child: InputTextField(
+                labelName: ENTER_YOUR_EMAIL, onChanged: (String val) {  }, textEditingController: textEditingControllerEmail,
               ),
             ),
             const SizedBox(height: MARGIN_LEVEL_1_MIDDLE,),
             Container(
               padding: const EdgeInsets.only(left:30,right: 30),
-              child: const InputTextField(
-                labelName: ENTER_YOUR_PASSWORD,
+              child: InputTextField(
+                labelName: ENTER_YOUR_PASSWORD, onChanged: (String val) {  }, textEditingController: textEditingControllerPassword,
               ),
             ),
             const SizedBox(
