@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:we_chat_app/blocs/register_bloc.dart';
 import 'package:we_chat_app/pages/home_screen.dart';
+import 'package:we_chat_app/pages/login_screen.dart';
 import 'package:we_chat_app/resources/colors.dart';
 import 'package:we_chat_app/resources/dimensions.dart';
 import 'package:we_chat_app/resources/images.dart';
@@ -14,13 +15,16 @@ import 'package:we_chat_app/widgets/sub_title_text.dart';
 import 'package:we_chat_app/widgets/title_text.dart';
 
 class RegisterScreen extends StatelessWidget {
-   RegisterScreen({Key? key}) : super(key: key);
+  RegisterScreen({Key? key}) : super(key: key);
 
-  final TextEditingController textEditingControllerName = TextEditingController();
-  final TextEditingController textEditingControllerEmail = TextEditingController();
-  final TextEditingController textEditingControllerPhoneNumber = TextEditingController();
-  final TextEditingController textEditingControllerPassword = TextEditingController();
-
+  final TextEditingController textEditingControllerName =
+      TextEditingController();
+  final TextEditingController textEditingControllerEmail =
+      TextEditingController();
+  final TextEditingController textEditingControllerPhoneNumber =
+      TextEditingController();
+  final TextEditingController textEditingControllerPassword =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +68,8 @@ class RegisterScreen extends StatelessWidget {
                       width: MediaQuery.of(context).size.width / 1.5,
                       child: InputTextField(
                         labelName: TEXT_FIELD_NAME,
-                        onChanged: (String val) => bloc.onChangedName(val), textEditingController: textEditingControllerName,
+                        onChanged: (String val) => bloc.onChangedName(val),
+                        textEditingController: textEditingControllerName,
                       ),
                     ),
                   ),
@@ -78,7 +83,8 @@ class RegisterScreen extends StatelessWidget {
                       width: MediaQuery.of(context).size.width / 1.5,
                       child: InputTextField(
                         labelName: TEXT_FIELD_EMAIL,
-                        onChanged: (String val) => bloc.onChangedEmail(val), textEditingController: textEditingControllerEmail,
+                        onChanged: (String val) => bloc.onChangedEmail(val),
+                        textEditingController: textEditingControllerEmail,
                       ),
                     ),
                   ),
@@ -93,7 +99,8 @@ class RegisterScreen extends StatelessWidget {
                       child: InputTextField(
                         labelName: TEXT_FIELD_PHONENUMBER,
                         onChanged: (String val) =>
-                            bloc.onChangedPhoneNumber(val), textEditingController: textEditingControllerPhoneNumber,
+                            bloc.onChangedPhoneNumber(val),
+                        textEditingController: textEditingControllerPhoneNumber,
                       ),
                     ),
                   ),
@@ -112,7 +119,8 @@ class RegisterScreen extends StatelessWidget {
                       width: MediaQuery.of(context).size.width,
                       child: InputTextField(
                         labelName: TEXT_FIELD_PASSWORD,
-                        onChanged: (String val) => bloc.onChangedPassword(val), textEditingController: textEditingControllerPassword,
+                        onChanged: (String val) => bloc.onChangedPassword(val),
+                        textEditingController: textEditingControllerPassword,
                       ),
                     ),
                   ),
@@ -126,11 +134,19 @@ class RegisterScreen extends StatelessWidget {
                   Consumer<RegisterBloc>(
                     builder: (context, bloc, child) => Center(
                       child: InkWell(
-                        onTap: () => bloc.isChecked ? bloc.onTapSignUp() : null,
+                        onTap: () => bloc.isChecked
+                            ? bloc
+                                .onTapSignUp()
+                                .then((_) =>
+                                    navigateToScreen(context, LoginScreen()))
+                                .catchError((error) => showSnackBarWithMessage(
+                                    context, error.toString()))
+                            : null,
                         child: PrimaryButton(
                             buttonName: "Sign Up",
                             borderColor: TRANSPARENT_COLOR,
-                            buttonColor: bloc.isChecked ? PRIMARY_COLOR : GREY_COLOR,
+                            buttonColor:
+                                bloc.isChecked ? PRIMARY_COLOR : GREY_COLOR,
                             textColor: PURE_WHITE_COLOR),
                       ),
                     ),
@@ -157,19 +173,19 @@ class CheckBoxAndAgreeTextWidget extends StatelessWidget {
     return Row(
       children: [
         Consumer<RegisterBloc>(
-  builder: (context, bloc, child) => Checkbox(
-    value: bloc.isChecked,
-    onChanged: (bool) => bloc.onCheckChange(),
-    activeColor: PURE_WHITE_COLOR,
-    checkColor: PURE_WHITE_COLOR,
-    fillColor: MaterialStateProperty.resolveWith<Color>((states) {
-      if (states.contains(MaterialState.selected)) {
-        return PRIMARY_COLOR;
-      }
-      return PRIMARY_COLOR; // Use the default fill color for other states
-    }),
-  ),
-),
+          builder: (context, bloc, child) => Checkbox(
+            value: bloc.isChecked,
+            onChanged: (bool) => bloc.onCheckChange(),
+            activeColor: PURE_WHITE_COLOR,
+            checkColor: PURE_WHITE_COLOR,
+            fillColor: MaterialStateProperty.resolveWith<Color>((states) {
+              if (states.contains(MaterialState.selected)) {
+                return PRIMARY_COLOR;
+              }
+              return PRIMARY_COLOR; // Use the default fill color for other states
+            }),
+          ),
+        ),
         RichText(
             text: const TextSpan(children: [
           TextSpan(

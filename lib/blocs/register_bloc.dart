@@ -1,7 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:we_chat_app/data/model/authentication_model.dart';
+import 'package:we_chat_app/data/model/authentication_model_impl.dart';
+import 'package:we_chat_app/data/vos/user_vo.dart';
 
 class RegisterBloc extends ChangeNotifier {
+  final AuthenticationModel _model = AuthenticationModelImpl();
+
   /// STATES
   bool isLoading = false;
   bool isDisposed = false;
@@ -68,17 +73,20 @@ class RegisterBloc extends ChangeNotifier {
     notifySafety();
   }
 
-  void onTapSignUp() {
+  Future onTapSignUp() {
+    showLoading();
     onChangedDateOfBirth();
-    print(name);
-    print(email);
-    print(phoneNumber);
-    print(dateOfBirth);
-    print(chooseGender);
-    print(password);
+    UserVO userVO = UserVO(
+      id: "",
+      name: name,
+      email: email,
+      phoneNumber: phoneNumber,
+      password: password,
+      dateOfBirth: dateOfBirth,
+      gender: chooseGender
+    );
+    return _model.registerNewUser(userVO).whenComplete(() => hideLoading());
   }
-
-
 
   void showLoading() {
     isLoading = true;

@@ -1,15 +1,20 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:we_chat_app/data/model/authentication_model.dart';
+import 'package:we_chat_app/data/model/authentication_model_impl.dart';
+import 'package:we_chat_app/pages/home_screen.dart';
 import 'package:we_chat_app/pages/splash_screen.dart';
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp({super.key});
+
+  final AuthenticationModel _model = AuthenticationModelImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SplashScreen(),
+      home: _model.autoLogin() ? const HomeScreen() : const SplashScreen(),
     );
   }
 }
