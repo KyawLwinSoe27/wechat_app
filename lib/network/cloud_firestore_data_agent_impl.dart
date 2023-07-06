@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_chat_app/data/vos/get_otp_vo.dart';
 import 'package:we_chat_app/data/vos/moments_vo.dart';
@@ -17,9 +20,13 @@ const userCollection = "users";
 const momentCollection = "moments";
 const commentSubCollection = "comments";
 
+/// STORAGE -> USER PHOTO
+const userStorageFolder = "user_photos";
+
 class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
   @override
   Future<GetOTPVO> getOTP() {
@@ -111,5 +118,10 @@ class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
         .collection(momentCollection)
         .doc(momentsVO.id.toString())
         .set(momentsVO.toJson());
+  }
+
+  @override
+  Future<String> uploadProfilePictureToFirebase(File imageFile) {
+    return firebaseStorage.ref(userStorageFolder).child("${DateTime.now().millisecondsSinceEpoch}").putFile(imageFile).then((taskSnapshot) => taskSnapshot.ref.getDownloadURL());
   }
 }

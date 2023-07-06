@@ -104,7 +104,7 @@ class GetOTPScreen extends StatelessWidget {
                           maxLength: 4,
                           pinBoxWidth: 45,
                           pinBoxHeight: 45,
-                          // maskCharacter: "😎",
+                          maskCharacter: "😎",
                           onDone: (String otp) => bloc.onTapDone(otp),
                           pinTextStyle: const TextStyle(
                               fontSize: 18.0, color: PRIMARY_COLOR),
@@ -142,8 +142,7 @@ class GetOTPScreen extends StatelessWidget {
                       builder: (context, bloc, child) => Center(
                         child: InkWell(
                           onTap: () async{
-                           bloc.onTapVerify();
-                           await Future.delayed(const Duration(milliseconds: 1000));
+                           await bloc.onTapVerify();
                            bloc.isOTPCorrect! ? navigateToScreen(context, RegisterScreen()) : showSnackBarWithMessage(context, "false");
                           },
                           child: const PrimaryButton(

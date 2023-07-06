@@ -25,7 +25,7 @@ class PostItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children:  [
-              const ProfilePicture(),
+              ProfilePicture(profilePicture : moment?.postOwnerPhoto),
               const SizedBox(width: MARGIN_LEVEL_1_MIDDLE,),
               Center(
                 child: Column(
@@ -48,12 +48,12 @@ class PostItem extends StatelessWidget {
               "https://ca-times.brightspotcdn.com/dims4/default/522c102/2147483647/strip/true/crop/4718x3604+0+0/resize/1200x917!/format/webp/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2F21%2F3491434e446c83711360a43f6978%2Fla-photos-1staff-471763-en-ana-de-armas-mjc-09.jpg"),
           const SizedBox(height: MARGIN_LEVEL_1_MIDDLE,),
           Row(
-            children: const [
-              FavouriteButtonAndCount(),
-              Spacer(),
-              CommentButtonAndCount(),
-              SizedBox(width: MARGIN_LEVEL_1_MIDDLE,),
-              Icon(Icons.bookmark,color: FAVOURITE_COLOR,)
+            children: [
+              FavouriteButtonAndCount(likeList : moment?.likeCount),
+              const Spacer(),
+              const CommentButtonAndCount(),
+              const SizedBox(width: MARGIN_LEVEL_1_MIDDLE,),
+              const Icon(Icons.bookmark,color: FAVOURITE_COLOR,)
             ],
           ),
           const SizedBox(height: MARGIN_LEVEL_1_MIDDLE,),
@@ -82,36 +82,40 @@ class CommentButtonAndCount extends StatelessWidget {
 }
 
 class FavouriteButtonAndCount extends StatelessWidget {
-  const FavouriteButtonAndCount({
+  List<String>? likeList;
+   FavouriteButtonAndCount({
     super.key,
+    this.likeList
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: const [
-        Icon(Icons.favorite_outline,color: PRIMARY_COLOR,size: 20,),
-        SizedBox(width: MARGIN_LEVEL_1_5,),
-        Text("10",style: TextStyle(color: PRIMARY_COLOR,fontWeight: FontWeight.w500,fontSize: 14),)
+      children: [
+        const Icon(Icons.favorite_outline,color: PRIMARY_COLOR,size: 20,),
+        const SizedBox(width: MARGIN_LEVEL_1_5,),
+        Text(likeList?.length.toString() ?? "0",style: TextStyle(color: PRIMARY_COLOR,fontWeight: FontWeight.w500,fontSize: 14),)
       ],
     );
   }
 }
 
 class ProfilePicture extends StatelessWidget {
-  const ProfilePicture({
+  String? profilePicture;
+   ProfilePicture({
     super.key,
+    this.profilePicture
   });
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
+    return SizedBox(
       width: 40,
       height: 40,
       child: CircleAvatar(
         radius: 20, // Image radius
         backgroundImage: NetworkImage(
-          'https://i.redd.it/dry65gj3b8a31.jpg',
+          profilePicture ?? 'https://i.redd.it/dry65gj3b8a31.jpg',
         ),
       ),
     );

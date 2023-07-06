@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:we_chat_app/data/model/authentication_model.dart';
 import 'package:we_chat_app/data/model/authentication_model_impl.dart';
-import 'package:we_chat_app/data/model/moment_model.dart';
 
 class GetOTPBloc extends ChangeNotifier {
   final AuthenticationModel _model = AuthenticationModelImpl();
@@ -19,9 +18,9 @@ class GetOTPBloc extends ChangeNotifier {
     notifySafety();
   }
 
-  void onTapVerify() {
+  Future<void> onTapVerify() async{
     showLoading();
-    _model.getOTP().then((value) {
+    await _model.getOTP().then((value) {
       if(value.otpCode == otpCode) {
         isOTPCorrect = true;
         hideLoading();

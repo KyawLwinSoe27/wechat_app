@@ -34,7 +34,7 @@ class AddNewMomentBloc extends ChangeNotifier {
 
   Future addNewPost() {
     if(content.isNotEmpty) {
-      return _momentModel.addNewMoment(content, userVO?.id ?? "", userVO?.name ?? "");
+      return _momentModel.addNewMoment(content, userVO?.id ?? "", userVO?.name ?? "", userVO?.profilePicture ?? "");
     } else {
       return Future.error("error");
     }

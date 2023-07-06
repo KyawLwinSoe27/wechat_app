@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:we_chat_app/data/model/authentication_model.dart';
 import 'package:we_chat_app/data/model/authentication_model_impl.dart';
@@ -21,9 +23,15 @@ class RegisterBloc extends ChangeNotifier {
   String dateOfBirthYear = "";
   DateTime dateOfBirth = DateTime.now();
   bool isChecked = true;
+  File? chooseProfilePicture;
 
 
   /// EVENTS
+
+   onImageChoose(File image) {
+     chooseProfilePicture = image;
+     notifySafety();
+   }
 
   void onCheckChange() {
     isChecked = !isChecked;
@@ -76,16 +84,14 @@ class RegisterBloc extends ChangeNotifier {
   Future onTapSignUp() {
     showLoading();
     onChangedDateOfBirth();
-    UserVO userVO = UserVO(
-      id: "",
-      name: name,
-      email: email,
-      phoneNumber: phoneNumber,
-      password: password,
-      dateOfBirth: dateOfBirth,
-      gender: chooseGender
-    );
-    return _model.registerNewUser(userVO).whenComplete(() => hideLoading());
+    return _model.registerNewUser(
+        email,
+        name,
+       password,
+       phoneNumber,
+       chooseGender,
+        dateOfBirth,
+      chooseProfilePicture).whenComplete(() => hideLoading());
   }
 
   void showLoading() {

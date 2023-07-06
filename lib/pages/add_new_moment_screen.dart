@@ -164,13 +164,15 @@ class ProfilePicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-      width: 40,
-      height: 40,
-      child: CircleAvatar(
-        radius: 20, // Image radius
-        backgroundImage: NetworkImage(
-          'https://i.redd.it/dry65gj3b8a31.jpg',
+    return  Consumer<AddNewMomentBloc>(
+      builder: (BuildContext context, bloc, Widget? child) => SizedBox(
+        width: 40,
+        height: 40,
+        child: CircleAvatar(
+          radius: 20, // Image radius
+          backgroundImage: NetworkImage(
+            bloc.userVO?.profilePicture ?? 'https://i.redd.it/dry65gj3b8a31.jpg',
+          ),
         ),
       ),
     );

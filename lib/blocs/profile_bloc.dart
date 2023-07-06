@@ -73,19 +73,19 @@ class ProfileBloc extends ChangeNotifier {
     notifySafety();
   }
 
-  Future onTapSignUp() {
-    showLoading();
-    onChangedDateOfBirth();
-    UserVO userVO = UserVO(
-        id: "",
-        name: userName,
-        email: email,
-        phoneNumber: phoneNumber,
-        dateOfBirth: dateOfBirth,
-        gender: chooseGender
-    );
-    return _model.registerNewUser(userVO).whenComplete(() => hideLoading());
-  }
+  // Future onTapSignUp() {
+  //   showLoading();
+  //   onChangedDateOfBirth();
+  //   UserVO userVO = UserVO(
+  //       id: "",
+  //       name: userName,
+  //       email: email,
+  //       phoneNumber: phoneNumber,
+  //       dateOfBirth: dateOfBirth,
+  //       gender: chooseGender
+  //   );
+  //   return _model.registerNewUser(userVO).whenComplete(() => hideLoading());
+  // }
 
 
   void showLoading() {

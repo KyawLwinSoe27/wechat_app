@@ -10,12 +10,15 @@ MomentsVO _$MomentsVOFromJson(Map<String, dynamic> json) => MomentsVO(
       id: json['post_id'] as String?,
       postOwnerId: json['post_owner_id'] as String?,
       postContent: json['content'] as String?,
-      likeCount: json['like_count'] as int?,
+      likeCount: (json['like_count'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       media: json['media'] as String?,
       postTime: json['post_time'] == null
           ? null
           : DateTime.parse(json['post_time'] as String),
       postOwnerName: json['post_owner_name'] as String?,
+      postOwnerPhoto: json['post_owner_photo'] as String?,
     );
 
 Map<String, dynamic> _$MomentsVOToJson(MomentsVO instance) => <String, dynamic>{
@@ -26,4 +29,5 @@ Map<String, dynamic> _$MomentsVOToJson(MomentsVO instance) => <String, dynamic>{
       'media': instance.media,
       'post_time': instance.postTime?.toIso8601String(),
       'post_owner_name': instance.postOwnerName,
+      'post_owner_photo': instance.postOwnerPhoto,
     };

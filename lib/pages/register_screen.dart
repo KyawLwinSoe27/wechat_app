@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:datepicker_dropdown/datepicker_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:we_chat_app/blocs/register_bloc.dart';
 import 'package:we_chat_app/pages/home_screen.dart';
@@ -59,7 +62,30 @@ class RegisterScreen extends StatelessWidget {
                     subTitleText: "Create a new account",
                   ),
                   const SizedBox(
-                    height: MARGIN_LEVEL_4_MIDDLE,
+                    height: MARGIN_LEVEL_2_LAST,
+                  ),
+                  Center(
+                    child: Consumer<RegisterBloc>(
+                      builder: (BuildContext context, bloc, Widget? child) => InkWell(
+                        onTap: () async{
+                          final ImagePicker picker = ImagePicker();
+                          final XFile? image = await picker.pickImage(
+                              source: ImageSource.camera);
+                          if(image != null) {
+                            bloc.onImageChoose(File(image.path));
+                          }
+                        },
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: PRIMARY_COLOR),
+                              borderRadius: BorderRadius.circular(50.0)
+                          ),
+                          child: bloc.chooseProfilePicture != null ? CircleAvatar(backgroundImage:  FileImage(bloc.chooseProfilePicture!)) :const Icon(Icons.cloud_upload_outlined),
+                        ),
+                      ),
+                    ),
                   ),
                   Consumer<RegisterBloc>(
                     builder: (context, bloc, child) => Container(

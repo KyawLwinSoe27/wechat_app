@@ -14,7 +14,7 @@ class MomentsVO {
   String? postContent;
 
   @JsonKey(name: "like_count")
-  int? likeCount;
+  List<String>? likeCount;
 
   @JsonKey(name: "media")
   String? media;
@@ -25,6 +25,9 @@ class MomentsVO {
   @JsonKey(name: "post_owner_name")
   String? postOwnerName;
 
+  @JsonKey(name: "post_owner_photo")
+  String? postOwnerPhoto;
+
   MomentsVO(
       {this.id,
       this.postOwnerId,
@@ -32,7 +35,8 @@ class MomentsVO {
       this.likeCount,
       this.media,
       this.postTime,
-      this.postOwnerName
+      this.postOwnerName,
+        this.postOwnerPhoto
       });
 
   factory MomentsVO.fromJson(Map<String,dynamic> json) => _$MomentsVOFromJson(json);

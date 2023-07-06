@@ -23,22 +23,23 @@ class MomentModelImpl extends MomentModel {
   }
 
   @override
-  Future<void> addNewMoment(String description, String postOwnerId, String postOwnerName) {
-    return craftNewsFeedVO(description,postOwnerId,postOwnerName).then((newMoment) {
+  Future<void> addNewMoment(String description, String postOwnerId, String postOwnerName, String postOwnerPhoto) {
+    return craftNewsFeedVO(description,postOwnerId,postOwnerName, postOwnerPhoto).then((newMoment) {
       return mDataAgent.addNewMoment(newMoment);
     });
   }
 
-  Future<MomentsVO> craftNewsFeedVO(String description, String postOwnerId, String postOwnerName) {
+  Future<MomentsVO> craftNewsFeedVO(String description, String postOwnerId, String postOwnerName, String postOwnerPhoto) {
     var milliseconds = DateTime.now().microsecondsSinceEpoch;
     var newMoment = MomentsVO(
         id: milliseconds.toString(),
         postOwnerId: postOwnerId,
         postOwnerName : postOwnerName,
         postContent: description,
-        likeCount: 0,
+        likeCount: ["user_id_1","user_id_2","user_id_3"],
         media: "",
-        postTime: DateTime.now());
+        postOwnerPhoto: postOwnerPhoto,
+        postTime: DateTime.now(),);
     return Future.value(newMoment);
   }
 }

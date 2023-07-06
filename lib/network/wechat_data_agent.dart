@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:we_chat_app/data/vos/get_otp_vo.dart';
 import 'package:we_chat_app/data/vos/moments_vo.dart';
 import 'package:we_chat_app/data/vos/user_vo.dart';
@@ -12,4 +14,5 @@ abstract class WeChatDataAgent {
   Stream<UserVO> getCurrentUserInfoById(String id);
   Stream<List<MomentsVO>> getAllMoments();
   Future<void> addNewMoment(MomentsVO momentsVO);
+  Future<String> uploadProfilePictureToFirebase(File imageFile);
 }
