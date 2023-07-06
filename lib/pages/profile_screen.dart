@@ -9,6 +9,7 @@ import 'package:we_chat_app/resources/strings.dart';
 import 'package:we_chat_app/viewitems/post_item.dart';
 import 'package:we_chat_app/widgets/input_text_field.dart';
 import 'package:we_chat_app/widgets/primary_button.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
@@ -408,11 +409,11 @@ class ProfilePhotoWidget extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Image.asset(QR_IMAGE),
-          ),
+          bloc.loggedInUser?.id != null ? Positioned(
+              bottom: -10,
+              right: 0,
+              child: SizedBox(width:60,height:60, child: QrImage(data: bloc.loggedInUser!.id!,foregroundColor: PURE_WHITE_COLOR,))
+          ) : Container(),
           const Positioned(
             bottom: 0,
             left: 0,
