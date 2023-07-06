@@ -27,6 +27,7 @@ class UserVO {
   @JsonKey(name: "profile_picture")
   String? profilePicture;
 
+
   UserVO({
     this.id,
     this.name,

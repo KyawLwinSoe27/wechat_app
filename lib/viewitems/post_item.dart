@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:we_chat_app/data/vos/moments_vo.dart';
+import 'package:we_chat_app/data/vos/user_vo.dart';
 import 'package:we_chat_app/resources/colors.dart';
 import 'package:we_chat_app/resources/dimensions.dart';
 
 class PostItem extends StatelessWidget {
+  final MomentsVO? moment;
   const PostItem({
     super.key,
+    required this.moment
   });
 
   @override
@@ -26,8 +30,8 @@ class PostItem extends StatelessWidget {
               Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text("Ana De Armas",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 16,color: PRIMARY_COLOR),),
+                  children: [
+                    Text(moment?.postOwnerName ?? "",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 16,color: PRIMARY_COLOR),),
                     SizedBox(height: MARGIN_LEVEL_1_5,),
                     Text("15 min ago", style: TextStyle(fontWeight: FontWeight.w400,fontSize: 12,color: GREY_COLOR),),
                   ],
@@ -38,7 +42,7 @@ class PostItem extends StatelessWidget {
             ],
           ),
           const SizedBox(height: MARGIN_LEVEL_1_MIDDLE,),
-          const Text("Nice !"),
+          Text(moment?.postContent ?? ""),
           const SizedBox(height: MARGIN_LEVEL_1_MIDDLE,),
           Image.network(
               "https://ca-times.brightspotcdn.com/dims4/default/522c102/2147483647/strip/true/crop/4718x3604+0+0/resize/1200x917!/format/webp/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2F21%2F3491434e446c83711360a43f6978%2Fla-photos-1staff-471763-en-ana-de-armas-mjc-09.jpg"),

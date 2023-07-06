@@ -6,4 +6,6 @@ abstract class AuthenticationModel {
   Future<void> registerNewUser(UserVO userVO);
   Future<void> login(String email, String password);
   bool autoLogin();
+  Stream<UserVO> getCurrentUserInfo();
+  Stream<UserVO> getCurrentUserInfoById(String id);
 }

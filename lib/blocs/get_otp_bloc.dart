@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:we_chat_app/data/model/authentication_model.dart';
 import 'package:we_chat_app/data/model/authentication_model_impl.dart';
-import 'package:we_chat_app/data/model/wechat_model.dart';
+import 'package:we_chat_app/data/model/moment_model.dart';
 
 class GetOTPBloc extends ChangeNotifier {
   final AuthenticationModel _model = AuthenticationModelImpl();

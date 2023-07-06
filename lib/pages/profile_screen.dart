@@ -1,5 +1,7 @@
 import 'package:datepicker_dropdown/datepicker_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:we_chat_app/blocs/profile_bloc.dart';
 import 'package:we_chat_app/resources/colors.dart';
 import 'package:we_chat_app/resources/dimensions.dart';
 import 'package:we_chat_app/resources/images.dart';
@@ -11,110 +13,128 @@ import 'package:we_chat_app/widgets/primary_button.dart';
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
 
-  final TextEditingController textEditingControllerName = TextEditingController();
-  final TextEditingController textEditingControllerPhoneNumber = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: BACKGROUND_COLOR,
-        automaticallyImplyLeading: false,
-        title: const Text(
-          "Me",
-          style: TextStyle(
-              color: PRIMARY_COLOR, fontSize: 34, fontWeight: FontWeight.w600),
-        ),
-        actions: [
-          InkWell(
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                             InputTextField(
-                              labelName: 'Name', onChanged: (String val) {  }, textEditingController: textEditingControllerName,
-                            ),
-                            const SizedBox(
-                              height: MARGIN_LEVEL_1_MIDDLE,
-                            ),
-                             InputTextField(
-                              labelName: 'Phone Number', onChanged: (String val) {  }, textEditingController: textEditingControllerPhoneNumber,
-                            ),
-                            const SizedBox(
-                              height: MARGIN_LEVEL_1_LAST,
-                            ),
-                            const ChooseDOBWidget(),
-                            const SizedBox(
-                              height: MARGIN_LEVEL_1_LAST,
-                            ),
-                            const ChooseGenderRowWidget(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const PrimaryButton(
-                                      buttonName: "Cancel",
-                                      borderColor: PRIMARY_COLOR,
-                                      buttonColor: PURE_WHITE_COLOR,
-                                      textColor: PRIMARY_COLOR,
-                                      width: 110,
-                                      height: 40,
-                                    )),
-                                InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const PrimaryButton(
-                                      buttonName: "Save",
-                                      borderColor: PURE_WHITE_COLOR,
-                                      buttonColor: PRIMARY_COLOR,
-                                      textColor: PURE_WHITE_COLOR,
-                                      width: 110,
-                                      height: 40,
-                                    )),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  });
-            },
-            child: Container(
-              margin: const EdgeInsets.all(MARGIN_LEVEL_1_MIDDLE),
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => ProfileBloc(),
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor: BACKGROUND_COLOR,
+          automaticallyImplyLeading: false,
+          title: const Text(
+            "Me",
+            style: TextStyle(
                 color: PRIMARY_COLOR,
-                borderRadius: BorderRadius.circular(MARGIN_LEVEL_1_5),
+                fontSize: 34,
+                fontWeight: FontWeight.w600),
+          ),
+          actions: [
+            InkWell(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              InputTextField(
+                                labelName: 'Name',
+                                onChanged: (String val) {},
+                                textEditingController:
+                                TextEditingController(),
+                              ),
+                              const SizedBox(
+                                height: MARGIN_LEVEL_1_MIDDLE,
+                              ),
+                              InputTextField(
+                                labelName: 'Email',
+                                onChanged: (String val) {},
+                                textEditingController:
+                                TextEditingController(),
+                              ),
+                              const SizedBox(
+                                height: MARGIN_LEVEL_1_MIDDLE,
+                              ),
+                              InputTextField(
+                                labelName: 'Phone Number',
+                                onChanged: (String val) {},
+                                textEditingController:
+                                TextEditingController(),
+                              ),
+                              const SizedBox(
+                                height: MARGIN_LEVEL_1_LAST,
+                              ),
+                              const ChooseDOBWidget(),
+                              const SizedBox(
+                                height: MARGIN_LEVEL_1_LAST,
+                              ),
+                              const ChooseGenderRowWidget(),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceAround,
+                                children: [
+                                  InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const PrimaryButton(
+                                        buttonName: "Cancel",
+                                        borderColor: PRIMARY_COLOR,
+                                        buttonColor: PURE_WHITE_COLOR,
+                                        textColor: PRIMARY_COLOR,
+                                        width: 110,
+                                        height: 40,
+                                      )),
+                                  InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const PrimaryButton(
+                                        buttonName: "Save",
+                                        borderColor: PURE_WHITE_COLOR,
+                                        buttonColor: PRIMARY_COLOR,
+                                        textColor: PURE_WHITE_COLOR,
+                                        width: 110,
+                                        height: 40,
+                                      )),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    });
+              },
+              child: Container(
+                margin: const EdgeInsets.all(MARGIN_LEVEL_1_MIDDLE),
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: PRIMARY_COLOR,
+                  borderRadius: BorderRadius.circular(MARGIN_LEVEL_1_5),
+                ),
+                child: Center(child: Image.asset(EDIT_PENCIL_BUTTON)),
               ),
-              child: Center(child: Image.asset(EDIT_PENCIL_BUTTON)),
-            ),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            ProfilePhotoAndNameColumnWidget(),
-            SizedBox(
-              height: MARGIN_LEVEL_1_MIDDLE,
-            ),
-            BookMarkedTitleText(),
-            SizedBox(
-              height: MARGIN_LEVEL_1_MIDDLE,
-            ),
-            BookMarkedMomentsListView()
+            )
           ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              ProfilePhotoAndNameColumnWidget(),
+              SizedBox(
+                height: MARGIN_LEVEL_1_MIDDLE,
+              ),
+              BookMarkedTitleText(),
+              SizedBox(
+                height: MARGIN_LEVEL_1_MIDDLE,
+              ),
+              // BookMarkedMomentsListView()
+            ],
+          ),
         ),
       ),
     );
@@ -238,25 +258,25 @@ class ChooseDOBWidget extends StatelessWidget {
   }
 }
 
-class BookMarkedMomentsListView extends StatelessWidget {
-  const BookMarkedMomentsListView({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 500,
-      child: ListView.builder(
-        itemCount: 100,
-        itemBuilder: (BuildContext context, int index) {
-          // Build and return the individual item widget
-          return const PostItem();
-        },
-      ),
-    );
-  }
-}
+// class BookMarkedMomentsListView extends StatelessWidget {
+//   const BookMarkedMomentsListView({
+//     super.key,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       height: 500,
+//       child: ListView.builder(
+//         itemCount: 100,
+//         itemBuilder: (BuildContext context, int index) {
+//           // Build and return the individual item widget
+//           return const PostItem();
+//         },
+//       ),
+//     );
+//   }
+// }
 
 class ProfilePhotoAndNameColumnWidget extends StatelessWidget {
   const ProfilePhotoAndNameColumnWidget({
@@ -328,39 +348,41 @@ class NameAndTextColumnWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Text(
-          "Phyo Zeyar",
-          style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 20.0,
-              color: PURE_WHITE_COLOR),
-        ),
-        SizedBox(
-          height: MARGIN_LEVEL_1_MIDDLE,
-        ),
-        IconAndTextWidget(
-          text: '09 1234567',
-          iconData: Icons.phone_android,
-        ),
-        SizedBox(
-          height: MARGIN_LEVEL_1_MIDDLE,
-        ),
-        IconAndTextWidget(
-          text: '1988-06-05',
-          iconData: Icons.calendar_month,
-        ),
-        SizedBox(
-          height: MARGIN_LEVEL_1_MIDDLE,
-        ),
-        IconAndTextWidget(
-          text: 'Male',
-          iconData: Icons.male,
-        ),
-      ],
-    );
+    return Consumer<ProfileBloc>(
+  builder: (context, bloc, child) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        bloc.userName,
+        style:const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 20.0,
+            color: PURE_WHITE_COLOR),
+      ),
+      const SizedBox(
+        height: MARGIN_LEVEL_1_MIDDLE,
+      ),
+      IconAndTextWidget(
+        text: bloc.phoneNumber,
+        iconData: Icons.phone_android,
+      ),
+      const SizedBox(
+        height: MARGIN_LEVEL_1_MIDDLE,
+      ),
+      IconAndTextWidget(
+        text: bloc.dateOfBirth.toString().substring(0,10),
+        iconData: Icons.calendar_month,
+      ),
+      const SizedBox(
+        height: MARGIN_LEVEL_1_MIDDLE,
+      ),
+      IconAndTextWidget(
+        text: bloc.chooseGender == 0 ? "Male" : (bloc.chooseGender == 1 ? "Female" : "Other"),
+        iconData: Icons.male,
+      ),
+    ],
+  ),
+);
   }
 }
 
@@ -371,33 +393,37 @@ class ProfilePhotoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        const SizedBox(
-          width: 150,
-          height: 150,
-          child: CircleAvatar(
-            radius: 20, // Image radius
-            backgroundImage: NetworkImage(
-              'https://i.redd.it/dry65gj3b8a31.jpg',
+    return Consumer<ProfileBloc>(
+      builder: (context, bloc, child) => Stack(
+        children: [
+          SizedBox(
+            width: 150,
+            height: 150,
+            child: CircleAvatar(
+              radius: 20, // Image radius
+              backgroundImage: NetworkImage(
+                bloc.profilePicture == ""
+                    ? 'https://i.redd.it/dry65gj3b8a31.jpg'
+                    : bloc.profilePicture,
+              ),
             ),
           ),
-        ),
-        Positioned(
-          bottom: 0,
-          right: 0,
-          child: Image.asset(QR_IMAGE),
-        ),
-        const Positioned(
-          bottom: 0,
-          left: 0,
-          child: Icon(
-            Icons.image_outlined,
-            size: 30,
-            color: Colors.white,
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Image.asset(QR_IMAGE),
           ),
-        ),
-      ],
+          const Positioned(
+            bottom: 0,
+            left: 0,
+            child: Icon(
+              Icons.image_outlined,
+              size: 30,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

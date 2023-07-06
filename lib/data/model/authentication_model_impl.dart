@@ -1,5 +1,5 @@
 import 'package:we_chat_app/data/model/authentication_model.dart';
-import 'package:we_chat_app/data/model/wechat_model.dart';
+import 'package:we_chat_app/data/model/moment_model.dart';
 import 'package:we_chat_app/data/vos/get_otp_vo.dart';
 import 'package:we_chat_app/data/vos/user_vo.dart';
 import 'package:we_chat_app/network/cloud_firestore_data_agent_impl.dart';
@@ -64,5 +64,15 @@ class AuthenticationModelImpl extends AuthenticationModel {
   @override
   bool autoLogin() {
     return mDataAgent.autoLogin();
+  }
+
+  @override
+  Stream<UserVO> getCurrentUserInfo() {
+    return mDataAgent.getCurrentUserInfo();
+  }
+
+  @override
+  Stream<UserVO> getCurrentUserInfoById(String id) {
+    return mDataAgent.getCurrentUserInfoById(id);
   }
 }

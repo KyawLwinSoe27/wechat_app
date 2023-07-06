@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_chat_app/data/vos/get_otp_vo.dart';
+import 'package:we_chat_app/data/vos/moments_vo.dart';
 import 'package:we_chat_app/data/vos/user_vo.dart';
 import 'package:we_chat_app/network/wechat_data_agent.dart';
 
@@ -10,6 +12,10 @@ const otpPasswordDocument = "otp_password";
 
 /// USER AUTH
 const userCollection = "users";
+
+/// MOMENTS
+const momentCollection = "moments";
+const commentSubCollection = "comments";
 
 class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
@@ -34,8 +40,8 @@ class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
         .then((UserCredential credential) =>
             credential.user?..updateDisplayName(userVO.name))
         .then((user) {
-          userVO.id = (user?.uid ?? "");
-          _addNewUser(userVO);
+      userVO.id = (user?.uid ?? "");
+      _addNewUser(userVO);
     });
   }
 
@@ -47,8 +53,10 @@ class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
   }
 
   @override
-  Future login(String email, String password) {
-    return firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+  Future login(String email, String password) async {
+    // SharedPreferences pref = await SharedPreferences.getInstance();
+    return firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
   }
 
   @override
@@ -62,7 +70,46 @@ class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
   }
 
   @override
-  Stream<UserVO> getCurrentUserInfo(String id) {
-    return fireStore.collection(userCollection).doc(id.toString()).get().asStream().where((documentSnapShot) => documentSnapShot.data() != null).map((documentSnapShot) => UserVO.fromJson(documentSnapShot.data()!));
+  Stream<UserVO> getCurrentUserInfo() {
+    return fireStore
+        .collection(userCollection)
+        .doc(firebaseAuth.currentUser?.uid.toString())
+        .get()
+        .asStream()
+        .where((documentSnapShot) => documentSnapShot.data() != null)
+        .map((documentSnapShot) => UserVO.fromJson(documentSnapShot.data()!));
+  }
+
+  @override
+  Stream<List<MomentsVO>> getAllMoments() {
+    return fireStore
+        .collection(momentCollection)
+        .snapshots()
+        .map((querySnapShot) => querySnapShot.docs
+            .map<MomentsVO>(
+              (document) => MomentsVO.fromJson(
+                document.data(),
+              ),
+            )
+            .toList());
+  }
+
+  @override
+  Stream<UserVO> getCurrentUserInfoById(String id) {
+    return fireStore
+        .collection(userCollection)
+        .doc(id.toString())
+        .get()
+        .asStream()
+        .where((documentSnapShot) => documentSnapShot.data() != null)
+        .map((documentSnapShot) => UserVO.fromJson(documentSnapShot.data()!));
+  }
+
+  @override
+  Future<void> addNewMoment(MomentsVO momentsVO) {
+    return fireStore
+        .collection(momentCollection)
+        .doc(momentsVO.id.toString())
+        .set(momentsVO.toJson());
   }
 }
