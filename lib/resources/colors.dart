@@ -9,3 +9,4 @@ const Color GREY_COLOR = Color.fromRGBO(153,153,153,1);
 const Color HINT_TEXT_COLOR = Color.fromRGBO(6, 39, 67, 1);
 const Color FAVOURITE_COLOR = Color.fromRGBO(243, 13, 52, 1);
 const Color SEARCH_FIELD_BG_COLOR = Color.fromRGBO(17, 58, 93, 0.21);
+const Color ACTIVE_NOW_COLOR = Color.fromRGBO(0, 220, 93, 1);

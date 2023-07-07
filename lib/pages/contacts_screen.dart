@@ -5,6 +5,7 @@ import 'package:we_chat_app/data/vos/user_vo.dart';
 import 'package:we_chat_app/pages/qr_scan_screen.dart';
 import 'package:we_chat_app/resources/images.dart';
 import 'package:we_chat_app/resources/strings.dart';
+import 'package:we_chat_app/widgets/page_title_text.dart';
 
 import '../resources/colors.dart';
 import '../resources/dimensions.dart';
@@ -17,10 +18,7 @@ class ContactsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: PURE_WHITE_COLOR,
-        title: const Text(
-          CONTACTS,
-          style: TextStyle(color: PRIMARY_COLOR),
-        ),
+        title: const PageTitleText(text: CONTACTS),
         actions: [
           InkWell(
             onTap: () {

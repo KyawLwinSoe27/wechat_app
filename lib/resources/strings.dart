@@ -28,3 +28,8 @@ const BOOKMARKED_MOMENTS = "Bookmarked Moments";
 
 /// CONTACTS
 const CONTACTS = "Contacts";
+
+
+/// CHATS
+const CHATS = "Chats";
+const ACTIVE_NOW = "Active Now";
