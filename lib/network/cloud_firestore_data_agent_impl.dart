@@ -15,6 +15,7 @@ const otpPasswordDocument = "otp_password";
 
 /// USER AUTH
 const userCollection = "users";
+const friendSubCollection = "friends";
 
 /// MOMENTS
 const momentCollection = "moments";
@@ -125,11 +126,48 @@ class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
 
   @override
   Future<String> uploadProfilePictureToFirebase(File imageFile) {
-    return firebaseStorage.ref(userStorageFolder).child("${DateTime.now().millisecondsSinceEpoch}").putFile(imageFile).then((taskSnapshot) => taskSnapshot.ref.getDownloadURL());
+    return firebaseStorage
+        .ref(userStorageFolder)
+        .child("${DateTime.now().millisecondsSinceEpoch}")
+        .putFile(imageFile)
+        .then((taskSnapshot) => taskSnapshot.ref.getDownloadURL());
   }
 
   @override
-  Future<String> uploadMultipleMomentPicture(File media,String postId) {
-    return firebaseStorage.ref().child("$momentsStorageFolder/$postId/${DateTime.now().millisecondsSinceEpoch}").putFile(media).then((taskSnapshot) => taskSnapshot.ref.getDownloadURL());
+  Future<String> uploadMultipleMomentPicture(File media, String postId) {
+    return firebaseStorage
+        .ref()
+        .child(
+            "$momentsStorageFolder/$postId/${DateTime.now().millisecondsSinceEpoch}")
+        .putFile(media)
+        .then((taskSnapshot) => taskSnapshot.ref.getDownloadURL());
+  }
+
+  @override
+  Future<void> addNewFriend(UserVO user) {
+    return fireStore
+        .collection(userCollection)
+        .doc(firebaseAuth.currentUser?.uid.toString())
+        .collection(friendSubCollection)
+        .doc(user.id.toString())
+        .set(user.toJson());
+  }
+
+  @override
+  Stream<List<UserVO>> getFriendList() {
+    return fireStore
+        .collection(userCollection)
+        .doc(firebaseAuth.currentUser?.uid.toString())
+        .collection(friendSubCollection)
+        .snapshots()
+        .map(
+          (querySnapShot) => querySnapShot.docs
+              .map<UserVO>(
+                (documnet) => UserVO.fromJson(
+                  documnet.data(),
+                ),
+              )
+              .toList(),
+        );
   }
 }

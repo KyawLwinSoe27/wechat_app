@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:we_chat_app/blocs/contacts_bloc.dart';
+import 'package:we_chat_app/data/vos/user_vo.dart';
 import 'package:we_chat_app/pages/qr_scan_screen.dart';
 import 'package:we_chat_app/resources/images.dart';
 import 'package:we_chat_app/resources/strings.dart';
@@ -38,54 +41,81 @@ class ContactsScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Column(
-        children: [
-          SearchFieldWidget(),
-          Container(
-            margin: EdgeInsets.symmetric(
-                horizontal: MARGIN_LEVEL_1_MIDDLE,
-                vertical: MARGIN_LEVEL_1_MIDDLE),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Groups(5)",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(
-                  height: MARGIN_LEVEL_1_MIDDLE,
-                ),
-                Row(
-                  children: [
-                    AddNewGroupWidget(),
-                    const SizedBox(
-                      width: MARGIN_LEVEL_1_5,
-                    ),
-                    GroupViewWidget(),
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: MARGIN_LEVEL_1_MIDDLE,left: MARGIN_LEVEL_1_5,),
-                  height: 490,
-                    child: ListView.builder(
-                        itemCount: 50,
-                        itemBuilder:(context, int index) => Container(
-                          margin: EdgeInsets.symmetric(vertical: MARGIN_LEVEL_1_5),
-                          padding: EdgeInsets.all(10.0),
-                          child: Row(
-                            children: [
-                              CircleAvatar(backgroundImage: NetworkImage("https://ca-times.brightspotcdn.com/dims4/default/522c102/2147483647/strip/true/crop/4718x3604+0+0/resize/1200x917!/format/webp/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2F21%2F3491434e446c83711360a43f6978%2Fla-photos-1staff-471763-en-ana-de-armas-mjc-09.jpg"),),
-                              const SizedBox(width: MARGIN_LEVEL_1_LAST,),
-                              Text("Kyaw Lwin Soe"),
-                            ],
-                          ),
-                        )))
-              ],
-            ),
-          )
-        ],
+      body: ChangeNotifierProvider(
+        create: (BuildContext context) => ContactsBloc(),
+        child: Column(
+          children: [
+            SearchFieldWidget(),
+            Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: MARGIN_LEVEL_1_MIDDLE,
+                  vertical: MARGIN_LEVEL_1_MIDDLE),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Groups(5)",
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(
+                    height: MARGIN_LEVEL_1_MIDDLE,
+                  ),
+                  Row(
+                    children: [
+                      AddNewGroupWidget(),
+                      const SizedBox(
+                        width: MARGIN_LEVEL_1_5,
+                      ),
+                      GroupViewWidget(),
+                    ],
+                  ),
+                  Consumer<ContactsBloc>(
+                    builder: (context, bloc, child) => Container(
+                        margin: const EdgeInsets.only(
+                          top: MARGIN_LEVEL_1_MIDDLE,
+                          left: MARGIN_LEVEL_1_5,
+                        ),
+                        height: 490,
+                        child: ListView.builder(
+                            itemCount: bloc.userList.length,
+                            itemBuilder: (context, int index) =>  FriendList(friend : bloc.userList[index]))),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
+  }
+}
+
+class FriendList extends StatelessWidget {
+  final UserVO friend;
+  const FriendList({
+    super.key,
+    required this.friend
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+          margin: const EdgeInsets.symmetric(
+              vertical: MARGIN_LEVEL_1_5),
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage:friend.profilePicture != null ? NetworkImage(friend.profilePicture!) :const NetworkImage(
+                    "https://ca-times.brightspotcdn.com/dims4/default/522c102/2147483647/strip/true/crop/4718x3604+0+0/resize/1200x917!/format/webp/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2F21%2F3491434e446c83711360a43f6978%2Fla-photos-1staff-471763-en-ana-de-armas-mjc-09.jpg"),
+              ),
+              const SizedBox(
+                width: MARGIN_LEVEL_1_LAST,
+              ),
+              Text(friend.name ?? "",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: PRIMARY_COLOR),),
+            ],
+          ),
+        );
   }
 }
 

@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:we_chat_app/blocs/qr_scan_bloc.dart';
 import 'package:we_chat_app/resources/colors.dart';
 
 class QRViewExample extends StatefulWidget {
@@ -31,29 +33,39 @@ class _QRViewExampleState extends State<QRViewExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          SizedBox(height: 700, child: _buildQrView(context)),
-          SizedBox(
-            height: 100,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                if (result != null)
-                  Text(
-                      'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                else
-                  const Text('Scan a code'),
-                MaterialButton(
-                    child: Text("DONE"),
-                    onPressed: () {
-                      if (result != null) {}
-                    })
-              ],
-            ),
-          )
-        ],
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => QRScanBloc(),
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            SizedBox(height: 700, child: _buildQrView(context)),
+            SizedBox(
+              height: 100,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  if (result != null)
+                    Text(
+                        'Barcode Type: ${describeEnum(
+                            result!.format)}   Data: ${result!.code}')
+                  else
+                    const Text('Scan a code'),
+                  Consumer<QRScanBloc>(
+                    builder: (context, bloc, child) =>
+                        MaterialButton(
+                            child: Text("DONE"),
+                            onPressed: () {
+                              if (result != null) {
+                                bloc.callApi(result!).then((value) =>
+                                    Navigator.pop(context));
+                              }
+                            }),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -63,20 +75,22 @@ class _QRViewExampleState extends State<QRViewExample> {
 
     // To ensure the Scanner view is properly sizes after rotation
     // we need to listen for Flutter SizeChanged notification and update controller
-    return QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
-      overlay: QrScannerOverlayShape(
-          borderColor: PURE_WHITE_COLOR,
-          borderRadius: 10,
-          borderLength: 30,
-          borderWidth: 10,
-          cutOutSize: 300),
-      onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
+    return Consumer<QRScanBloc>(
+      builder: (context, bloc, child) => QRView(
+        key: qrKey,
+        onQRViewCreated: (controller) => _onQRViewCreated(controller, bloc),
+        overlay: QrScannerOverlayShape(
+            borderColor: PURE_WHITE_COLOR,
+            borderRadius: 10,
+            borderLength: 30,
+            borderWidth: 10,
+            cutOutSize: 300),
+        onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
+      ),
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
+  void _onQRViewCreated(QRViewController controller, QRScanBloc bloc) {
     setState(() {
       this.controller = controller;
     });
@@ -85,6 +99,7 @@ class _QRViewExampleState extends State<QRViewExample> {
         result = scanData;
       });
     });
+
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {

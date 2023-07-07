@@ -16,4 +16,6 @@ abstract class WeChatDataAgent {
   Future<void> addNewMoment(MomentsVO momentsVO);
   Future<String> uploadProfilePictureToFirebase(File imageFile);
   Future<String> uploadMultipleMomentPicture(File media,String postId);
+  Future<void> addNewFriend(UserVO user);
+  Stream<List<UserVO>> getFriendList();
 }
