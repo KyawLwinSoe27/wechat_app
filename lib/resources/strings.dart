@@ -24,3 +24,7 @@ const SETTINGS_BUTTON_BAR = "Settings";
 
 /// PROFILE SCREEN
 const BOOKMARKED_MOMENTS = "Bookmarked Moments";
+
+
+/// CONTACTS
+const CONTACTS = "Contacts";

@@ -43,8 +43,7 @@ class ProfileScreen extends StatelessWidget {
                               InputTextField(
                                 labelName: 'Name',
                                 onChanged: (String val) {},
-                                textEditingController:
-                                TextEditingController(),
+                                textEditingController: TextEditingController(),
                               ),
                               const SizedBox(
                                 height: MARGIN_LEVEL_1_MIDDLE,
@@ -52,8 +51,7 @@ class ProfileScreen extends StatelessWidget {
                               InputTextField(
                                 labelName: 'Email',
                                 onChanged: (String val) {},
-                                textEditingController:
-                                TextEditingController(),
+                                textEditingController: TextEditingController(),
                               ),
                               const SizedBox(
                                 height: MARGIN_LEVEL_1_MIDDLE,
@@ -61,8 +59,7 @@ class ProfileScreen extends StatelessWidget {
                               InputTextField(
                                 labelName: 'Phone Number',
                                 onChanged: (String val) {},
-                                textEditingController:
-                                TextEditingController(),
+                                textEditingController: TextEditingController(),
                               ),
                               const SizedBox(
                                 height: MARGIN_LEVEL_1_LAST,
@@ -74,7 +71,7 @@ class ProfileScreen extends StatelessWidget {
                               const ChooseGenderRowWidget(),
                               Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   InkWell(
                                       onTap: () {
@@ -350,40 +347,42 @@ class NameAndTextColumnWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ProfileBloc>(
-  builder: (context, bloc, child) => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        bloc.userName,
-        style:const TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: 20.0,
-            color: PURE_WHITE_COLOR),
+      builder: (context, bloc, child) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            bloc.userName,
+            style: const TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 20.0,
+                color: PURE_WHITE_COLOR),
+          ),
+          const SizedBox(
+            height: MARGIN_LEVEL_1_MIDDLE,
+          ),
+          IconAndTextWidget(
+            text: bloc.phoneNumber,
+            iconData: Icons.phone_android,
+          ),
+          const SizedBox(
+            height: MARGIN_LEVEL_1_MIDDLE,
+          ),
+          IconAndTextWidget(
+            text: bloc.dateOfBirth.toString().substring(0, 10),
+            iconData: Icons.calendar_month,
+          ),
+          const SizedBox(
+            height: MARGIN_LEVEL_1_MIDDLE,
+          ),
+          IconAndTextWidget(
+            text: bloc.chooseGender == 0
+                ? "Male"
+                : (bloc.chooseGender == 1 ? "Female" : "Other"),
+            iconData: Icons.male,
+          ),
+        ],
       ),
-      const SizedBox(
-        height: MARGIN_LEVEL_1_MIDDLE,
-      ),
-      IconAndTextWidget(
-        text: bloc.phoneNumber,
-        iconData: Icons.phone_android,
-      ),
-      const SizedBox(
-        height: MARGIN_LEVEL_1_MIDDLE,
-      ),
-      IconAndTextWidget(
-        text: bloc.dateOfBirth.toString().substring(0,10),
-        iconData: Icons.calendar_month,
-      ),
-      const SizedBox(
-        height: MARGIN_LEVEL_1_MIDDLE,
-      ),
-      IconAndTextWidget(
-        text: bloc.chooseGender == 0 ? "Male" : (bloc.chooseGender == 1 ? "Female" : "Other"),
-        iconData: Icons.male,
-      ),
-    ],
-  ),
-);
+    );
   }
 }
 
@@ -409,11 +408,20 @@ class ProfilePhotoWidget extends StatelessWidget {
               ),
             ),
           ),
-          bloc.loggedInUser?.id != null ? Positioned(
-              bottom: -10,
-              right: 0,
-              child: SizedBox(width:60,height:60, child: QrImage(data: bloc.loggedInUser!.id!,foregroundColor: PURE_WHITE_COLOR,))
-          ) : Container(),
+          bloc.loggedInUser?.id != null
+              ? Positioned(
+                  bottom: -10,
+                  right: 0,
+                  child: SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: QrImage(
+                      data: bloc.loggedInUser!.id!,
+                      foregroundColor: PURE_WHITE_COLOR,
+                    ),
+                  ),
+                )
+              : Container(),
           const Positioned(
             bottom: 0,
             left: 0,

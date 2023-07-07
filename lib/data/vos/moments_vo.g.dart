@@ -13,7 +13,8 @@ MomentsVO _$MomentsVOFromJson(Map<String, dynamic> json) => MomentsVO(
       likeCount: (json['like_count'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-      media: json['media'] as String?,
+      media:
+          (json['media'] as List<dynamic>?)?.map((e) => e as String).toList(),
       postTime: json['post_time'] == null
           ? null
           : DateTime.parse(json['post_time'] as String),

@@ -8,3 +8,4 @@ const Color PURE_WHITE_COLOR = Color.fromRGBO(255, 255, 255, 1);
 const Color GREY_COLOR = Color.fromRGBO(153,153,153,1);
 const Color HINT_TEXT_COLOR = Color.fromRGBO(6, 39, 67, 1);
 const Color FAVOURITE_COLOR = Color.fromRGBO(243, 13, 52, 1);
+const Color SEARCH_FIELD_BG_COLOR = Color.fromRGBO(17, 58, 93, 0.21);

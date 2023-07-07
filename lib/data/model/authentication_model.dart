@@ -14,6 +14,7 @@ abstract class AuthenticationModel {
       File? userProfilePicture,);
   Future<void> login(String email, String password);
   bool autoLogin();
+  Future<void> logOut();
   Stream<UserVO> getCurrentUserInfo();
   Stream<UserVO> getCurrentUserInfoById(String id);
 }

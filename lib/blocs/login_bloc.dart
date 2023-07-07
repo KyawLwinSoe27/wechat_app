@@ -33,6 +33,9 @@ class LoginBloc extends ChangeNotifier {
     return _model.login(email, password);
   }
 
+  Future<void> onTapLogout() {
+    return _model.logOut();
+  }
 
   void showLoading() {
     isLoading = true;

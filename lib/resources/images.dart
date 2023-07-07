@@ -21,3 +21,6 @@ const SETTING_BOTTOM_BAR_ACTIVE_ICON = "assets/images/Settings-Inactive.png";
 
 const EDIT_PENCIL_BUTTON = "assets/images/Edit.png";
 const QR_IMAGE = "assets/images/QR.png";
+
+const ADD_PEOPLE = "assets/images/AddPeople.png";
+const CREATE_GROUP_ICON = "assets/images/CreateGroupIcon.png";

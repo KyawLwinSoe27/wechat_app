@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:we_chat_app/data/model/moment_model.dart';
 import 'package:we_chat_app/data/model/moment_model_impl.dart';
@@ -15,6 +17,7 @@ class AddNewMomentBloc extends ChangeNotifier {
   UserVO? userVO;
   String content = "";
   String userId = "";
+  List<File>? medias;
 
   /// Model
   final MomentModel _momentModel = MomentModelImpl();
@@ -32,9 +35,14 @@ class AddNewMomentBloc extends ChangeNotifier {
     notifySafety();
   }
 
+  onImageChoose(List<File> images) {
+    medias = images;
+    notifySafety();
+  }
+
   Future addNewPost() {
     if(content.isNotEmpty) {
-      return _momentModel.addNewMoment(content, userVO?.id ?? "", userVO?.name ?? "", userVO?.profilePicture ?? "");
+      return _momentModel.addNewMoment(content, userVO?.id ?? "", userVO?.name ?? "", userVO?.profilePicture ?? "", medias);
     } else {
       return Future.error("error");
     }

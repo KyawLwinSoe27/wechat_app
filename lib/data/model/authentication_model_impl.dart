@@ -24,6 +24,7 @@ class AuthenticationModelImpl extends AuthenticationModel {
     return mDataAgent.getOTP();
   }
 
+  @override
   Future<void> registerNewUser(
     String email,
     String userName,
@@ -120,5 +121,10 @@ class AuthenticationModelImpl extends AuthenticationModel {
   @override
   Stream<UserVO> getCurrentUserInfoById(String id) {
     return mDataAgent.getCurrentUserInfoById(id);
+  }
+
+  @override
+  Future<void> logOut() {
+    return mDataAgent.logout();
   }
 }

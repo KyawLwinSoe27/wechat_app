@@ -23,6 +23,9 @@ const commentSubCollection = "comments";
 /// STORAGE -> USER PHOTO
 const userStorageFolder = "user_photos";
 
+/// STORAGE -> MOMENTS PHOTOS
+const momentsStorageFolder = "moments_photos";
+
 class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -123,5 +126,10 @@ class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
   @override
   Future<String> uploadProfilePictureToFirebase(File imageFile) {
     return firebaseStorage.ref(userStorageFolder).child("${DateTime.now().millisecondsSinceEpoch}").putFile(imageFile).then((taskSnapshot) => taskSnapshot.ref.getDownloadURL());
+  }
+
+  @override
+  Future<String> uploadMultipleMomentPicture(File media,String postId) {
+    return firebaseStorage.ref().child("$momentsStorageFolder/$postId/${DateTime.now().millisecondsSinceEpoch}").putFile(media).then((taskSnapshot) => taskSnapshot.ref.getDownloadURL());
   }
 }

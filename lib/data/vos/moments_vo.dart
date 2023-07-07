@@ -17,7 +17,7 @@ class MomentsVO {
   List<String>? likeCount;
 
   @JsonKey(name: "media")
-  String? media;
+  List<String>? media;
 
   @JsonKey(name: "post_time")
   DateTime? postTime;
