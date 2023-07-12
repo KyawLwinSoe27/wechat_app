@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:we_chat_app/blocs/qr_scan_bloc.dart';
+import 'package:we_chat_app/pages/contacts_screen.dart';
 import 'package:we_chat_app/resources/colors.dart';
+
+import '../widgets/LoadingWidget.dart';
 
 class QRViewExample extends StatefulWidget {
   const QRViewExample({Key? key}) : super(key: key);
@@ -36,35 +39,30 @@ class _QRViewExampleState extends State<QRViewExample> {
     return ChangeNotifierProvider(
       create: (BuildContext context) => QRScanBloc(),
       child: Scaffold(
-        body: Column(
-          children: <Widget>[
-            SizedBox(height: 700, child: _buildQrView(context)),
-            SizedBox(
-              height: 100,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  if (result != null)
-                    Text(
-                        'Barcode Type: ${describeEnum(
-                            result!.format)}   Data: ${result!.code}')
-                  else
-                    const Text('Scan a code'),
-                  Consumer<QRScanBloc>(
-                    builder: (context, bloc, child) =>
-                        MaterialButton(
-                            child: Text("DONE"),
-                            onPressed: () {
-                              if (result != null) {
-                                bloc.callApi(result!).then((value) =>
-                                    Navigator.pop(context));
-                              }
-                            }),
-                  )
-                ],
-              ),
-            )
-          ],
+        body: Selector<QRScanBloc, bool>(
+          selector: (context, bloc) => bloc.isLoading,
+          builder: (context, isLoading, child) {
+            return Stack(
+              children: [
+                Column(
+                  children: <Widget>[
+                    SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        child: _buildQrView(context)),
+                  ],
+                ),
+                Visibility(
+                  visible: isLoading,
+                  child: Container(
+                    color: Colors.black12,
+                    child: const Center(
+                      child: LoadingWidget(),
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
         ),
       ),
     );
@@ -78,7 +76,9 @@ class _QRViewExampleState extends State<QRViewExample> {
     return Consumer<QRScanBloc>(
       builder: (context, bloc, child) => QRView(
         key: qrKey,
-        onQRViewCreated: (controller) => _onQRViewCreated(controller, bloc),
+        onQRViewCreated: (controller) async {
+          await bloc.onQRViewCreated(controller, bloc, context);
+        },
         overlay: QrScannerOverlayShape(
             borderColor: PURE_WHITE_COLOR,
             borderRadius: 10,
@@ -88,18 +88,6 @@ class _QRViewExampleState extends State<QRViewExample> {
         onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
       ),
     );
-  }
-
-  void _onQRViewCreated(QRViewController controller, QRScanBloc bloc) {
-    setState(() {
-      this.controller = controller;
-    });
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-    });
-
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {

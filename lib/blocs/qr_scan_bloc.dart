@@ -1,9 +1,12 @@
-import 'dart:io';
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:we_chat_app/data/model/authentication_model.dart';
+import 'package:we_chat_app/data/model/authentication_model_impl.dart';
 import 'package:we_chat_app/data/model/contact_model.dart';
 import 'package:we_chat_app/data/model/contact_model_impl.dart';
+
+import '../data/vos/user_vo.dart';
 
 class QRScanBloc extends ChangeNotifier {
   /// STATES
@@ -12,36 +15,49 @@ class QRScanBloc extends ChangeNotifier {
   // Barcode? result;
   QRViewController? controller;
   Barcode? result;
+  UserVO? makeFriendToUser;
 
   final ContactModel _model = ContactModelImpl();
+  final AuthenticationModel authenticationModel = AuthenticationModelImpl();
 
 
-  Future<void> callApi(Barcode qr) {
-    result = qr;
-    notifySafety();
-    if(result?.code != null) {
-      return _model.addNewContact(result!.code!);
-    } else {
-      return Future.error("error");
+  Future<void> addNewFriend(String? userId) async {
+    if(userId != null){
+      isLoading = true;
+      notifySafety();
+      _model.addNewContact(result!.code!).then((value) => isLoading = false);
     }
-
   }
 
-  // void onQRViewCreated(QRViewController controller) {
-  //   this.controller = controller;
-  //   controller.scannedDataStream.listen((scanData) {
-  //     result = scanData;
-  //     notifySafety();
-  //   });
-  //   print(result);
-  // }
-  //
-  // void reassembleCamera() {
-  //   if (Platform.isAndroid) {
-  //     controller!.pauseCamera();
-  //   }
-  //   controller!.resumeCamera();
-  // }
+  Future<bool> onQRViewCreated(QRViewController controller, QRScanBloc bloc,BuildContext context) async{
+    this.controller = controller;
+    notifySafety();
+
+    final completer = Completer<bool>();
+
+    controller.scannedDataStream.listen((scanData) async {
+      result = scanData;
+      controller.pauseCamera();
+      isLoading = true;
+      notifySafety();
+
+      makeFriendToUser = await authenticationModel.getCurrentUserInfoById(result?.code ?? "").first;
+      await _model.addNewContact(result!.code!);
+
+      isLoading = false;
+      notifySafety();
+
+      completer.complete(true);
+    });
+
+    return completer.future.then((value) {
+      if (value) {
+        Navigator.pop(context); // Replace 'context' with the appropriate context
+      }
+      return value;
+    });
+  }
+
 
   void hideLoading() {
     isLoading = false;

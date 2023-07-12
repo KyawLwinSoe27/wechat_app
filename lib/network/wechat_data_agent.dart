@@ -18,4 +18,5 @@ abstract class WeChatDataAgent {
   Future<String> uploadMultipleMomentPicture(File media,String postId);
   Future<void> addNewFriend(UserVO user);
   Stream<List<UserVO>> getFriendList();
+  Future<bool> onTapFavouriteButton(String postId);
 }

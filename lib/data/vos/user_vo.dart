@@ -27,6 +27,9 @@ class UserVO {
   @JsonKey(name: "profile_picture")
   String? profilePicture;
 
+  @JsonKey(name: "device_token")
+  String? deviceToken;
+
 
   UserVO({
     this.id,
@@ -37,6 +40,7 @@ class UserVO {
     this.gender,
     this.password,
     this.profilePicture,
+    this.deviceToken
   });
 
   factory UserVO.fromJson(Map<String, dynamic> json) => _$UserVOFromJson(json);

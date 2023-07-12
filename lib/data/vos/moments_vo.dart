@@ -16,6 +16,9 @@ class MomentsVO {
   @JsonKey(name: "like_count")
   List<String>? likeCount;
 
+  @JsonKey(name: "is_like")
+  bool? isLike;
+
   @JsonKey(name: "media")
   List<String>? media;
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:we_chat_app/data/vos/moments_vo.dart';
-import 'package:we_chat_app/data/vos/user_vo.dart';
 import 'package:we_chat_app/resources/colors.dart';
 import 'package:we_chat_app/resources/dimensions.dart';
 
 class PostItem extends StatelessWidget {
   final MomentsVO? moment;
-  const PostItem({super.key, required this.moment});
+  final Function() onTap;
+  const PostItem({super.key, required this.moment, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +31,15 @@ class PostItem extends StatelessWidget {
                   children: [
                     Text(
                       moment?.postOwnerName ?? "",
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 16,
                           color: PRIMARY_COLOR),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: MARGIN_LEVEL_1_5,
                     ),
-                    Text(
+                    const Text(
                       "15 min ago",
                       style: TextStyle(
                           fontWeight: FontWeight.w400,
@@ -63,14 +63,13 @@ class PostItem extends StatelessWidget {
           const SizedBox(
             height: MARGIN_LEVEL_1_MIDDLE,
           ),
-          Image.network(
-                  "https://ca-times.brightspotcdn.com/dims4/default/522c102/2147483647/strip/true/crop/4718x3604+0+0/resize/1200x917!/format/webp/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2F21%2F3491434e446c83711360a43f6978%2Fla-photos-1staff-471763-en-ana-de-armas-mjc-09.jpg"),
+          moment?.media == null && moment?.media == [] ? Container() : Column(children: List.generate(moment!.media!.length, (index) => Image.network(moment!.media![index]),),),
           const SizedBox(
             height: MARGIN_LEVEL_1_MIDDLE,
           ),
           Row(
             children: [
-              FavouriteButtonAndCount(likeList: moment?.likeCount),
+              FavouriteButtonAndCount(likeList: moment?.likeCount, onTap: () => onTap(), isLike : moment?.isLike),
               const Spacer(),
               const CommentButtonAndCount(),
               const SizedBox(
@@ -123,24 +122,29 @@ class CommentButtonAndCount extends StatelessWidget {
 }
 
 class FavouriteButtonAndCount extends StatelessWidget {
-  List<String>? likeList;
-  FavouriteButtonAndCount({super.key, this.likeList});
+  final List<String>? likeList;
+  final Function() onTap;
+  final bool? isLike;
+  const FavouriteButtonAndCount({super.key, this.likeList, required this.onTap, required this.isLike});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Icon(
-          Icons.favorite_outline,
-          color: PRIMARY_COLOR,
-          size: 20,
+        GestureDetector(
+          onTap: () => onTap(),
+          child: Icon(
+            isLike != null && isLike == true ? Icons.favorite : Icons.favorite_outline,
+            color: isLike != null && isLike == true ? Colors.red : PRIMARY_COLOR,
+            size: 20,
+          ),
         ),
         const SizedBox(
           width: MARGIN_LEVEL_1_5,
         ),
         Text(
           likeList?.length.toString() ?? "0",
-          style: TextStyle(
+          style: const TextStyle(
               color: PRIMARY_COLOR, fontWeight: FontWeight.w500, fontSize: 14),
         )
       ],
@@ -149,8 +153,8 @@ class FavouriteButtonAndCount extends StatelessWidget {
 }
 
 class ProfilePicture extends StatelessWidget {
-  String? profilePicture;
-  ProfilePicture({super.key, this.profilePicture});
+  final String? profilePicture;
+  const ProfilePicture({super.key, this.profilePicture});
 
   @override
   Widget build(BuildContext context) {

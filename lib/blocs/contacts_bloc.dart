@@ -11,14 +11,36 @@ class ContactsBloc extends ChangeNotifier {
   List<UserVO> userList = [];
   bool isLoading = false;
   bool isDisposed = false;
+  Map<String, List<UserVO>>? groupedUsers;
+  List<String> indexList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
 
 
   ContactsBloc() {
     _model.getFriendsList().listen((userList) {
       this.userList = userList;
       notifySafety();
+      groupUsersByName(userList);
     });
   }
+
+  void groupUsersByName(List<UserVO> userList) {
+    Map<String, List<UserVO>> groupedUsers = {};
+
+    for (UserVO user in userList) {
+      String firstCharacter = user.name![0].toUpperCase();
+
+      if (groupedUsers.containsKey(firstCharacter)) {
+        groupedUsers[firstCharacter]!.add(user);
+      } else {
+        groupedUsers[firstCharacter] = [user];
+      }
+    }
+    this.groupedUsers = groupedUsers;
+    notifySafety();
+  }
+
+
 
 
   void showLoading() {

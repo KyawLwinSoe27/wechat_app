@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:we_chat_app/data/vos/get_otp_vo.dart';
 import 'package:we_chat_app/data/vos/moments_vo.dart';
 import 'package:we_chat_app/data/vos/user_vo.dart';
@@ -31,6 +31,8 @@ class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+
 
   @override
   Future<GetOTPVO> getOTP() {
@@ -65,9 +67,11 @@ class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
 
   @override
   Future login(String email, String password) async {
-    // SharedPreferences pref = await SharedPreferences.getInstance();
-    return firebaseAuth.signInWithEmailAndPassword(
+    String? token = await firebaseMessaging.getToken();
+    await firebaseAuth.signInWithEmailAndPassword(
         email: email, password: password);
+    String userId = firebaseAuth.currentUser!.uid;
+    return fireStore.collection(userCollection).doc(userId).update({"device_token" : token});
   }
 
   @override
@@ -144,13 +148,20 @@ class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
   }
 
   @override
-  Future<void> addNewFriend(UserVO user) {
-    return fireStore
+  Future<void> addNewFriend(UserVO user) async {
+    UserVO currentUser = await getCurrentUserInfo().first;
+    await fireStore
         .collection(userCollection)
         .doc(firebaseAuth.currentUser?.uid.toString())
         .collection(friendSubCollection)
         .doc(user.id.toString())
         .set(user.toJson());
+    await fireStore
+        .collection(userCollection)
+        .doc(user.id.toString())
+        .collection(friendSubCollection)
+        .doc(firebaseAuth.currentUser?.uid.toString())
+        .set(currentUser.toJson());
   }
 
   @override
@@ -169,5 +180,43 @@ class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
               )
               .toList(),
         );
+  }
+
+  @override
+  Future<bool> onTapFavouriteButton(String postId) async {
+    DocumentSnapshot documentSnapshot =
+        await fireStore.collection(momentCollection).doc(postId).get();
+    Map<String, dynamic>? data =
+        documentSnapshot.data() as Map<String, dynamic>?;
+    if (data != null && data["like_count"] is List<dynamic>) {
+      List<dynamic> userList = data['like_count'];
+      if (userList.contains(firebaseAuth.currentUser!.uid)) {
+        userList.remove(firebaseAuth.currentUser!.uid);
+        await FirebaseFirestore.instance
+            .collection(momentCollection)
+            .doc(postId)
+            .update({'like_count': userList});
+        await FirebaseFirestore.instance
+            .collection(momentCollection)
+            .doc(postId)
+            .update({'is_like': false});
+        print('User removed from the list');
+        return false;
+      } else {
+        userList.add(firebaseAuth.currentUser!.uid);
+        await fireStore.collection(momentCollection).doc(postId).update({
+          'like_count': userList,
+        });
+        await FirebaseFirestore.instance
+            .collection(momentCollection)
+            .doc(postId)
+            .update({'is_like': true});
+        print('User added to the list');
+        return true;
+      }
+    } else {
+      print('Field or document does not exist');
+      return false;
+    }
   }
 }

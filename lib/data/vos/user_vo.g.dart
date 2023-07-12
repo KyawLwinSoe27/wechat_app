@@ -17,6 +17,7 @@ UserVO _$UserVOFromJson(Map<String, dynamic> json) => UserVO(
       gender: json['gender'] as int?,
       password: json['password'] as String?,
       profilePicture: json['profile_picture'] as String?,
+      deviceToken: json['device_token'] as String?,
     );
 
 Map<String, dynamic> _$UserVOToJson(UserVO instance) => <String, dynamic>{
@@ -28,4 +29,5 @@ Map<String, dynamic> _$UserVOToJson(UserVO instance) => <String, dynamic>{
       'gender': instance.gender,
       'password': instance.password,
       'profile_picture': instance.profilePicture,
+      'device_token': instance.deviceToken,
     };

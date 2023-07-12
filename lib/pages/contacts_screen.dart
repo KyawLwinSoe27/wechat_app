@@ -43,9 +43,9 @@ class ContactsScreen extends StatelessWidget {
         create: (BuildContext context) => ContactsBloc(),
         child: Column(
           children: [
-            SearchFieldWidget(),
+            const SearchFieldWidget(),
             Container(
-              margin: EdgeInsets.symmetric(
+              margin: const EdgeInsets.symmetric(
                   horizontal: MARGIN_LEVEL_1_MIDDLE,
                   vertical: MARGIN_LEVEL_1_MIDDLE),
               child: Column(
@@ -59,25 +59,89 @@ class ContactsScreen extends StatelessWidget {
                     height: MARGIN_LEVEL_1_MIDDLE,
                   ),
                   Row(
-                    children: [
+                    children: const [
                       AddNewGroupWidget(),
-                      const SizedBox(
+                      SizedBox(
                         width: MARGIN_LEVEL_1_5,
                       ),
                       GroupViewWidget(),
                     ],
                   ),
+                  // Consumer<ContactsBloc>(
+                  //   builder: (context, bloc, child) => Container(
+                  //       margin: const EdgeInsets.only(
+                  //         top: MARGIN_LEVEL_1_MIDDLE,
+                  //         left: MARGIN_LEVEL_1_5,
+                  //       ),
+                  //       height: 490,
+                  //       child: ListView.builder(
+                  //           itemCount: bloc.userList.length,
+                  //           itemBuilder: (context, int index) =>  FriendList(friend : bloc.userList[index]))),
+                  // )
                   Consumer<ContactsBloc>(
-                    builder: (context, bloc, child) => Container(
-                        margin: const EdgeInsets.only(
-                          top: MARGIN_LEVEL_1_MIDDLE,
-                          left: MARGIN_LEVEL_1_5,
+                    builder: (BuildContext context, bloc, Widget? child) =>
+                        Row(
+                      children: [
+                        SizedBox(
+                          width: 340,
+                          height: 500,
+                          child: bloc.groupedUsers != null
+                              ? ListView.builder(
+                                  itemCount: bloc.groupedUsers?.length,
+                                  itemBuilder: (context, index) {
+                                    String? character =
+                                        bloc.groupedUsers?.keys.toList()[index];
+                                    List<UserVO>? users =
+                                        bloc.groupedUsers?[character]!;
+
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ListTile(
+                                          title: Text(character ?? ""),
+                                        ),
+                                        ListView.separated(
+                                          shrinkWrap: true,
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          itemCount: users?.length ?? 0,
+                                          separatorBuilder: (context, index) =>
+                                              const Divider(),
+                                          itemBuilder: (context, index) {
+                                            UserVO user = users![index];
+                                            return ListTile(
+                                              title: Text(user.name!),
+                                              // Add other UI elements for the user
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                )
+                              : Container(),
                         ),
-                        height: 490,
-                        child: ListView.builder(
-                            itemCount: bloc.userList.length,
-                            itemBuilder: (context, int index) =>  FriendList(friend : bloc.userList[index]))),
-                  )
+                        Align(
+                         alignment: Alignment.center,
+                          child: SizedBox(
+                            height: 500,
+                            width: 30,
+                            child: ListView.builder(
+                              itemCount: bloc.indexList.length,
+                              itemBuilder: (context, index) {
+                                String character = bloc.indexList[index];
+                                return ListTile(
+                                  title: Text(character),
+                                  // Add any desired styling for the index list
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             )
@@ -90,30 +154,34 @@ class ContactsScreen extends StatelessWidget {
 
 class FriendList extends StatelessWidget {
   final UserVO friend;
-  const FriendList({
-    super.key,
-    required this.friend
-  });
+  const FriendList({super.key, required this.friend});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-          margin: const EdgeInsets.symmetric(
-              vertical: MARGIN_LEVEL_1_5),
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundImage:friend.profilePicture != null ? NetworkImage(friend.profilePicture!) :const NetworkImage(
+      margin: const EdgeInsets.symmetric(vertical: MARGIN_LEVEL_1_5),
+      padding: const EdgeInsets.all(10.0),
+      child: Row(
+        children: [
+          CircleAvatar(
+            backgroundImage: friend.profilePicture != null
+                ? NetworkImage(friend.profilePicture!)
+                : const NetworkImage(
                     "https://ca-times.brightspotcdn.com/dims4/default/522c102/2147483647/strip/true/crop/4718x3604+0+0/resize/1200x917!/format/webp/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2F21%2F3491434e446c83711360a43f6978%2Fla-photos-1staff-471763-en-ana-de-armas-mjc-09.jpg"),
-              ),
-              const SizedBox(
-                width: MARGIN_LEVEL_1_LAST,
-              ),
-              Text(friend.name ?? "",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 16,color: PRIMARY_COLOR),),
-            ],
           ),
-        );
+          const SizedBox(
+            width: MARGIN_LEVEL_1_LAST,
+          ),
+          Text(
+            friend.name ?? "",
+            style: const TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 16,
+                color: PRIMARY_COLOR),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -144,14 +212,14 @@ class GroupViewWidget extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 2,
                       blurRadius: 5,
-                      offset: Offset(0, 3), // Offset to create a bottom shadow
+                      offset: const Offset(0, 3), // Offset to create a bottom shadow
                     ),
                   ],
                 ),
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+                    children: const [
                       Icon(
                         Icons.group,
                         size: 40,
@@ -185,10 +253,10 @@ class AddNewGroupWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(CREATE_GROUP_ICON),
-            SizedBox(
+            const SizedBox(
               height: MARGIN_LEVEL_1_MIDDLE,
             ),
-            Text(
+            const Text(
               "Add New",
               style: TextStyle(
                   fontSize: 14,

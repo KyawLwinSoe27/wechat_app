@@ -30,7 +30,12 @@ class LoginBloc extends ChangeNotifier {
   }
 
   Future onTapLogin() {
-    return _model.login(email, password);
+    isLoading = true;
+    notifySafety();
+    return _model.login(email, password).whenComplete(() {
+      isLoading = false;
+      notifySafety();
+    });
   }
 
   Future<void> onTapLogout() {

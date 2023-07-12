@@ -31,6 +31,12 @@ class MomentsBloc extends ChangeNotifier {
     });
   }
 
+  void onTapFavouriteButton(String postId) async{
+     await socialMediaModel.onTapFavouriteButton(postId);
+     notifySafety();
+  }
+
+
   void showLoading() {
     isLoading = true;
     notifySafety();

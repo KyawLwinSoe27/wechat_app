@@ -29,8 +29,7 @@ class MomentsScreen extends StatelessWidget {
                         0, 3), // Set the vertical offset of the shadow
                     blurStyle: BlurStyle.outer),
                 const BoxShadow(
-                  color: Colors
-                      .transparent,
+                  color: Colors.transparent,
                   // Set the color to transparent for the other sides
                   blurRadius: 5,
                   // Set the blur radius of the shadow
@@ -68,14 +67,29 @@ class MomentsScreen extends StatelessWidget {
           ),
           Consumer<MomentsBloc>(
             builder: (context, bloc, child) => Expanded(
-              child: ListView.builder(
-                itemCount: bloc.momentList?.length ?? 0 ,
-                itemBuilder: (BuildContext context, int index) {
-                  // Build and return the individual item widget
-                  return PostItem(moment: bloc.momentList![index]);
-                },
-              ),
-            ),
+                child: bloc.momentList == null && bloc.momentList == []
+                    ? Container(
+                        child: const Center(
+                          child: Text(
+                            "No Posts Available, Create a New Post",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20,
+                                color: GREY_COLOR),
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: bloc.momentList?.length ?? 0,
+                        itemBuilder: (BuildContext context, int index) {
+                          // Build and return the individual item widget
+                          return PostItem(
+                              moment: bloc.momentList![index],
+                              onTap: () => bloc.onTapFavouriteButton(
+                                    bloc.momentList![index].id ?? "",
+                                  ));
+                        },
+                      )),
           )
         ],
       ),

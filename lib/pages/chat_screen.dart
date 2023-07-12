@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:we_chat_app/pages/peer_to_peer_chat_screen.dart';
 import 'package:we_chat_app/resources/colors.dart';
 import 'package:we_chat_app/resources/dimensions.dart';
 import 'package:we_chat_app/resources/strings.dart';
+import 'package:we_chat_app/utils/extensions.dart';
 import 'package:we_chat_app/widgets/page_title_text.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -175,45 +177,48 @@ class ActiveNowFriendList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: MARGIN_LEVEL_1_5),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Stack(
-            children: [
-              const SizedBox(
-                width: 50,
-                height: 50,
-                child: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "https://ca-times.brightspotcdn.com/dims4/default/522c102/2147483647/strip/true/crop/4718x3604+0+0/resize/1200x917!/format/webp/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2F21%2F3491434e446c83711360a43f6978%2Fla-photos-1staff-471763-en-ana-de-armas-mjc-09.jpg"),
-                ),
-              ),
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    color: ACTIVE_NOW_COLOR,
-                    border: Border.all(color: PURE_WHITE_COLOR, width: 4.0),
-                    borderRadius: BorderRadius.circular(10),
+    return InkWell(
+      onTap: () => navigateToScreen(context, PeerToPeerChatScreen()),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: MARGIN_LEVEL_1_5),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              children: [
+                const SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        "https://ca-times.brightspotcdn.com/dims4/default/522c102/2147483647/strip/true/crop/4718x3604+0+0/resize/1200x917!/format/webp/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2F21%2F3491434e446c83711360a43f6978%2Fla-photos-1staff-471763-en-ana-de-armas-mjc-09.jpg"),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const Center(
-            child: SizedBox(
-              width: 80,
-              child: Text("Kyaw Lwin Soe"),
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: ACTIVE_NOW_COLOR,
+                      border: Border.all(color: PURE_WHITE_COLOR, width: 4.0),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          )
-        ],
+            const Center(
+              child: SizedBox(
+                width: 80,
+                child: Text("Kyaw Lwin Soe"),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

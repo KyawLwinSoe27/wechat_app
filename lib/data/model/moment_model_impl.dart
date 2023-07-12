@@ -48,10 +48,15 @@ class MomentModelImpl extends MomentModel {
         postOwnerId: postOwnerId,
         postOwnerName : postOwnerName,
         postContent: description,
-        likeCount: ["user_id_1","user_id_2","user_id_3"],
+        likeCount: [],
         media: downloadURLs,
         postOwnerPhoto: postOwnerPhoto,
         postTime: DateTime.now(),);
     return Future.value(newMoment);
+  }
+
+  @override
+  Future<bool> onTapFavouriteButton(String postId) {
+    return mDataAgent.onTapFavouriteButton(postId);
   }
 }
