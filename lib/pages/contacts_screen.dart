@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:we_chat_app/blocs/contacts_bloc.dart';
 import 'package:we_chat_app/data/vos/user_vo.dart';
+import 'package:we_chat_app/pages/peer_to_peer_chat_screen.dart';
 import 'package:we_chat_app/pages/qr_scan_screen.dart';
 import 'package:we_chat_app/resources/images.dart';
 import 'package:we_chat_app/resources/strings.dart';
+import 'package:we_chat_app/utils/extensions.dart';
 import 'package:we_chat_app/widgets/page_title_text.dart';
 
 import '../resources/colors.dart';
@@ -94,29 +96,34 @@ class ContactsScreen extends StatelessWidget {
                                     List<UserVO>? users =
                                         bloc.groupedUsers?[character]!;
 
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ListTile(
-                                          title: Text(character ?? ""),
-                                        ),
-                                        ListView.separated(
-                                          shrinkWrap: true,
-                                          physics:
-                                              const NeverScrollableScrollPhysics(),
-                                          itemCount: users?.length ?? 0,
-                                          separatorBuilder: (context, index) =>
-                                              const Divider(),
-                                          itemBuilder: (context, index) {
-                                            UserVO user = users![index];
-                                            return ListTile(
-                                              title: Text(user.name!),
-                                              // Add other UI elements for the user
-                                            );
-                                          },
-                                        ),
-                                      ],
+                                    return Container(
+                                      margin: const EdgeInsets.only(top: MARGIN_LEVEL_1_MIDDLE),
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromRGBO(0, 0, 0, 0.1),
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                              padding: const EdgeInsets.only(left: 10.0,top: 10.0),
+                                              child: Text(character ?? "")),
+                                          ListView.separated(
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: users?.length ?? 0,
+                                            separatorBuilder: (context, index) =>
+                                                const Divider(),
+                                            itemBuilder: (context, index) {
+                                              UserVO user = users![index];
+                                              return FriendList(friend : user);
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     );
                                   },
                                 )
@@ -158,28 +165,34 @@ class FriendList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: MARGIN_LEVEL_1_5),
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundImage: friend.profilePicture != null
-                ? NetworkImage(friend.profilePicture!)
-                : const NetworkImage(
-                    "https://ca-times.brightspotcdn.com/dims4/default/522c102/2147483647/strip/true/crop/4718x3604+0+0/resize/1200x917!/format/webp/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2F21%2F3491434e446c83711360a43f6978%2Fla-photos-1staff-471763-en-ana-de-armas-mjc-09.jpg"),
-          ),
-          const SizedBox(
-            width: MARGIN_LEVEL_1_LAST,
-          ),
-          Text(
-            friend.name ?? "",
-            style: const TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 16,
-                color: PRIMARY_COLOR),
-          ),
-        ],
+    return InkWell(
+      onTap: () {
+        print(friend.id);
+        navigateToScreen(context, PeerToPeerChatScreen(friendId : friend.id ?? ""));
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: MARGIN_LEVEL_1_5),
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundImage: friend.profilePicture != null
+                  ? NetworkImage(friend.profilePicture!)
+                  : const NetworkImage(
+                      "https://ca-times.brightspotcdn.com/dims4/default/522c102/2147483647/strip/true/crop/4718x3604+0+0/resize/1200x917!/format/webp/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2F21%2F3491434e446c83711360a43f6978%2Fla-photos-1staff-471763-en-ana-de-armas-mjc-09.jpg"),
+            ),
+            const SizedBox(
+              width: MARGIN_LEVEL_1_LAST,
+            ),
+            Text(
+              friend.name ?? "",
+              style: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                  color: PRIMARY_COLOR),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,4 @@
-
 import 'dart:io';
-
 import 'package:we_chat_app/data/vos/moments_vo.dart';
 
 abstract class MomentModel {

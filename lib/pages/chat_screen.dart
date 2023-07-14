@@ -178,7 +178,7 @@ class ActiveNowFriendList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => navigateToScreen(context, PeerToPeerChatScreen()),
+      // onTap: () => navigateToScreen(context, PeerToPeerChatScreen()),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: MARGIN_LEVEL_1_5),
         child: Column(
