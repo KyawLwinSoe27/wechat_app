@@ -415,9 +415,38 @@ class ProfilePhotoWidget extends StatelessWidget {
                   child: SizedBox(
                     width: 60,
                     height: 60,
-                    child: QrImage(
-                      data: bloc.loggedInUser!.id!,
-                      foregroundColor: PURE_WHITE_COLOR,
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Scan Me To Make Friend'),
+                              content: Container(
+                                margin: const EdgeInsets.only(left: 15.0,top: 5.0),
+                                width: 200,
+                                height: 200,
+                                child: QrImage(
+                                  data: bloc.loggedInUser!.id!,
+                                  foregroundColor: Colors.black,
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  child: Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // Close the dialog
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: QrImage(
+                        data: bloc.loggedInUser!.id!,
+                        foregroundColor: PURE_WHITE_COLOR,
+                      ),
                     ),
                   ),
                 )

@@ -1,4 +1,5 @@
 import 'package:we_chat_app/data/model/message_model.dart';
+import 'package:we_chat_app/data/vos/group_vo.dart';
 import 'package:we_chat_app/data/vos/message_vo.dart';
 import 'package:we_chat_app/network/wechat_chats_data_agent.dart';
 import 'package:we_chat_app/network/wechat_chats_data_agent_impl.dart';
@@ -24,4 +25,5 @@ class MessageModelImpl extends MessageModel {
   Stream<List<MessageVO>> getMessage(String friendId) {
     return weChatChatsDataAgent.getMessage(friendId);
   }
+
 }

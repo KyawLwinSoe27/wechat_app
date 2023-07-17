@@ -1,28 +1,29 @@
+import 'dart:core';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:we_chat_app/data/model/contact_model.dart';
 import 'package:we_chat_app/data/model/contact_model_impl.dart';
+import 'package:we_chat_app/data/vos/group_vo.dart';
 import 'package:we_chat_app/data/vos/user_vo.dart';
 
-import '../data/vos/group_vo.dart';
+import '../data/model/authentication_model.dart';
 
-class ContactsBloc extends ChangeNotifier {
-  final ContactModel _model = ContactModelImpl();
-
+class CreateNewGroupBloc extends ChangeNotifier {
   /// STATES
+  File? chooseProfilePicture;
   List<UserVO> userList = [];
   bool isLoading = false;
   bool isDisposed = false;
   Map<String, List<UserVO>>? groupedUsers;
   List<String> indexList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-  List<GroupVO> groupList = [];
+  List<UserVO>  selectedUserList = [];
+  List<String> selectedUserId = [];
+  String groupName = "";
 
+  final ContactModel _model = ContactModelImpl();
 
-  ContactsBloc() {
-    _model.getGroupList().listen((groupList) {
-      this.groupList = groupList;
-      notifySafety();
-    });
+  CreateNewGroupBloc() {
     _model.getFriendsList().listen((userList) {
       this.userList = userList;
       notifySafety();
@@ -46,6 +47,42 @@ class ContactsBloc extends ChangeNotifier {
     notifySafety();
   }
 
+  onSelectUser(UserVO user) {
+    if(selectedUserList.contains(user)){
+      selectedUserList.remove(user);
+      notifySafety();
+    } else {
+      selectedUserList.add(user);
+      notifySafety();
+    }
+  }
+
+  onUnselectUser(UserVO user) {
+    if(selectedUserList.contains(user)){
+      selectedUserList.remove(user);
+      notifySafety();
+    }
+  }
+
+  onImageChoose(File image) {
+    chooseProfilePicture = image;
+    notifySafety();
+  }
+
+  onGroupNameChange(String groupName) {
+    this.groupName = groupName;
+    notifySafety();
+  }
+
+  Future<void> onTapGroupCreate() async{
+    showLoading();
+    if(selectedUserList.isNotEmpty) {
+      selectedUserList.forEach((element) {
+        selectedUserId.add(element.id!);
+      });
+      _model.createGroup(groupName, chooseProfilePicture, selectedUserId).whenComplete(() => hideLoading());
+    }
+  }
 
   void showLoading() {
     isLoading = true;

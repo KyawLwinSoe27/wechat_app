@@ -95,7 +95,6 @@ class PeerToPeerChatScreen extends StatelessWidget {
                                 decoration: const InputDecoration(
                                   hintText: "Type a message",
                                 ),
-                                controller: TextEditingController(text: bloc.textMessage == "" ? "" : bloc.textMessage),
                                 onChanged: (value) => bloc.onTextChanged(value),
                               ),
                             ),
@@ -207,8 +206,8 @@ class ChatMessageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: MARGIN_LEVEL_1_MIDDLE),
-      padding: const EdgeInsets.symmetric(vertical: MARGIN_LEVEL_1_MIDDLE),
+      margin: const EdgeInsets.symmetric(vertical: MARGIN_LEVEL_1_MIDDLE,horizontal: MARGIN_LEVEL_1_MIDDLE),
+      padding: const EdgeInsets.symmetric(vertical: MARGIN_LEVEL_1_MIDDLE,horizontal: MARGIN_LEVEL_1_MIDDLE),
       height: 75,
       decoration: BoxDecoration(
           color: message?.senderId == currentUserId ? PRIMARY_COLOR : OTHER_SENT_BG_COLOR,

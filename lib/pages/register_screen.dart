@@ -17,6 +17,8 @@ import 'package:we_chat_app/widgets/primary_button.dart';
 import 'package:we_chat_app/widgets/sub_title_text.dart';
 import 'package:we_chat_app/widgets/title_text.dart';
 
+import '../widgets/LoadingWidget.dart';
+
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({Key? key}) : super(key: key);
 
@@ -35,152 +37,189 @@ class RegisterScreen extends StatelessWidget {
       children: [
         ChangeNotifierProvider(
           create: (BuildContext context) => RegisterBloc(),
-          child: Scaffold(
-            backgroundColor: BACKGROUND_COLOR,
-            appBar: AppBar(
-              elevation: 0,
-              backgroundColor: BACKGROUND_COLOR,
-              leading: const BackButton(
-                color: PRIMARY_COLOR,
-              ),
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(
-                    height: MARGIN_LEVEL_2_MIDDLE,
-                  ),
-                  const TitleText(
-                    titleText: "Hi !",
-                  ),
-                  const SizedBox(
-                    height: MARGIN_LEVEL_1_MIDDLE,
-                  ),
-                  const SubTitleText(
-                    subTitleText: "Create a new account",
-                  ),
-                  const SizedBox(
-                    height: MARGIN_LEVEL_2_LAST,
-                  ),
-                  Center(
-                    child: Consumer<RegisterBloc>(
-                      builder: (BuildContext context, bloc, Widget? child) => InkWell(
-                        onTap: () async{
-                          final ImagePicker picker = ImagePicker();
-                          final XFile? image = await picker.pickImage(
-                              source: ImageSource.camera);
-                          if(image != null) {
-                            bloc.onImageChoose(File(image.path));
-                          }
-                        },
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: PRIMARY_COLOR),
-                              borderRadius: BorderRadius.circular(50.0)
-                          ),
-                          child: bloc.chooseProfilePicture != null ? CircleAvatar(backgroundImage:  FileImage(bloc.chooseProfilePicture!)) :const Icon(Icons.cloud_upload_outlined),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Consumer<RegisterBloc>(
-                    builder: (context, bloc, child) => Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: MARGIN_LEVEL_1_LAST),
-                      width: MediaQuery.of(context).size.width / 1.5,
-                      child: InputTextField(
-                        labelName: TEXT_FIELD_NAME,
-                        onChanged: (String val) => bloc.onChangedName(val),
-                        textEditingController: textEditingControllerName,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: MARGIN_LEVEL_1_MIDDLE,
-                  ),
-                  Consumer<RegisterBloc>(
-                    builder: (context, bloc, child) => Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: MARGIN_LEVEL_1_LAST),
-                      width: MediaQuery.of(context).size.width / 1.5,
-                      child: InputTextField(
-                        labelName: TEXT_FIELD_EMAIL,
-                        onChanged: (String val) => bloc.onChangedEmail(val),
-                        textEditingController: textEditingControllerEmail,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: MARGIN_LEVEL_1_MIDDLE,
-                  ),
-                  Consumer<RegisterBloc>(
-                    builder: (context, bloc, child) => Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: MARGIN_LEVEL_1_LAST),
-                      width: MediaQuery.of(context).size.width / 1.5,
-                      child: InputTextField(
-                        labelName: TEXT_FIELD_PHONENUMBER,
-                        onChanged: (String val) =>
-                            bloc.onChangedPhoneNumber(val),
-                        textEditingController: textEditingControllerPhoneNumber,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: MARGIN_LEVEL_2_LAST,
-                  ),
-                  const ChooseDOBWidget(),
-                  const SizedBox(
-                    height: MARGIN_LEVEL_2_LAST,
-                  ),
-                  const ChooseGenderWidget(),
-                  Consumer<RegisterBloc>(
-                    builder: (context, bloc, child) => Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: MARGIN_LEVEL_1_LAST),
-                      width: MediaQuery.of(context).size.width,
-                      child: InputTextField(
-                        labelName: TEXT_FIELD_PASSWORD,
-                        onChanged: (String val) => bloc.onChangedPassword(val),
-                        textEditingController: textEditingControllerPassword,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: MARGIN_LEVEL_1_LAST,
-                  ),
-                  const CheckBoxAndAgreeTextWidget(),
-                  const SizedBox(
-                    height: MARGIN_LEVEL_1_LAST,
-                  ),
-                  Consumer<RegisterBloc>(
-                    builder: (context, bloc, child) => Center(
-                      child: InkWell(
-                        onTap: () => bloc.isChecked
-                            ? bloc
-                                .onTapSignUp()
-                                .then((_) =>
-                                    navigateToScreen(context, LoginScreen()))
-                                .catchError((error) => showSnackBarWithMessage(
-                                    context, error.toString()))
-                            : null,
-                        child: PrimaryButton(
-                            buttonName: "Sign Up",
-                            borderColor: TRANSPARENT_COLOR,
-                            buttonColor:
-                                bloc.isChecked ? PRIMARY_COLOR : GREY_COLOR,
-                            textColor: PURE_WHITE_COLOR),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          child: Selector<RegisterBloc, bool>(
+  selector: (context, bloc) => bloc.isLoading,
+  builder: (context, isLoading, child) => Stack(
+    children: [
+      Scaffold(
+        backgroundColor: BACKGROUND_COLOR,
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: BACKGROUND_COLOR,
+          leading: const BackButton(
+            color: PRIMARY_COLOR,
           ),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: MARGIN_LEVEL_2_MIDDLE,
+              ),
+              const TitleText(
+                titleText: "Hi !",
+              ),
+              const SizedBox(
+                height: MARGIN_LEVEL_1_MIDDLE,
+              ),
+              const SubTitleText(
+                subTitleText: "Create a new account",
+              ),
+              const SizedBox(
+                height: MARGIN_LEVEL_2_LAST,
+              ),
+              Center(
+                child: Consumer<RegisterBloc>(
+                  builder: (BuildContext context, bloc, Widget? child) => InkWell(
+                    onTap: () async{
+                      final ImagePicker picker = ImagePicker();
+                      final XFile? image = await picker.pickImage(
+                          source: ImageSource.camera);
+                      if(image != null) {
+                        bloc.onImageChoose(File(image.path));
+                      }
+                    },
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: PRIMARY_COLOR),
+                          borderRadius: BorderRadius.circular(50.0)
+                      ),
+                      child: bloc.chooseProfilePicture != null ? CircleAvatar(backgroundImage:  FileImage(bloc.chooseProfilePicture!)) :const Icon(Icons.cloud_upload_outlined),
+                    ),
+                  ),
+                ),
+              ),
+              Consumer<RegisterBloc>(
+                builder: (context, bloc, child) => Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: MARGIN_LEVEL_1_LAST),
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  child: InputTextField(
+                    labelName: TEXT_FIELD_NAME,
+                    onChanged: (String val) => bloc.onChangedName(val),
+                    textEditingController: textEditingControllerName,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: MARGIN_LEVEL_1_MIDDLE,
+              ),
+              Consumer<RegisterBloc>(
+                builder: (context, bloc, child) => Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: MARGIN_LEVEL_1_LAST),
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  child: InputTextField(
+                    labelName: TEXT_FIELD_EMAIL,
+                    onChanged: (String val) => bloc.onChangedEmail(val),
+                    textEditingController: textEditingControllerEmail,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: MARGIN_LEVEL_1_MIDDLE,
+              ),
+              Consumer<RegisterBloc>(
+                builder: (context, bloc, child) => Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: MARGIN_LEVEL_1_LAST),
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  child: InputTextField(
+                    labelName: TEXT_FIELD_PHONENUMBER,
+                    onChanged: (String val) =>
+                        bloc.onChangedPhoneNumber(val),
+                    textEditingController: textEditingControllerPhoneNumber,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: MARGIN_LEVEL_2_LAST,
+              ),
+              const ChooseDOBWidget(),
+              const SizedBox(
+                height: MARGIN_LEVEL_2_LAST,
+              ),
+              const ChooseGenderWidget(),
+              Consumer<RegisterBloc>(
+                builder: (context, bloc, child) => Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: MARGIN_LEVEL_1_LAST),
+                  width: MediaQuery.of(context).size.width,
+                  child: Stack(
+                    children: [
+                      TextField(
+                        decoration: const InputDecoration(
+                          focusedBorder:UnderlineInputBorder(
+                            borderSide: BorderSide(color: PRIMARY_COLOR),
+                          ),
+                          enabledBorder:UnderlineInputBorder(
+                            borderSide: BorderSide(color: PRIMARY_COLOR),
+                          ),
+                          labelText: "Password",
+                          labelStyle:TextStyle(color: Colors.grey),
+                        ),
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
+                        onChanged: (val) => bloc.onChangedPassword(val),
+                        obscureText: bloc.isShowPassword,
+                      ),
+                      Positioned(
+                        top: 20,
+                          right: 10,
+                          child: InkWell(
+                            onTap: () => bloc.toggleShowHidePassword(),
+                              child: Icon(bloc.isShowPassword ? Icons.remove_red_eye :  Icons.security )))
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: MARGIN_LEVEL_1_LAST,
+              ),
+              const CheckBoxAndAgreeTextWidget(),
+              const SizedBox(
+                height: MARGIN_LEVEL_1_LAST,
+              ),
+              Consumer<RegisterBloc>(
+                builder: (context, bloc, child) => Center(
+                  child: InkWell(
+                    onTap: () => bloc.isChecked
+                        ? bloc
+                        .onTapSignUp()
+                        .then((_) =>
+                        navigateToScreen(context, LoginScreen()))
+                        .catchError((error) => showSnackBarWithMessage(
+                        context, error.toString()))
+                        : null,
+                    child: PrimaryButton(
+                        buttonName: "Sign Up",
+                        borderColor: TRANSPARENT_COLOR,
+                        buttonColor:
+                        bloc.isChecked ? PRIMARY_COLOR : GREY_COLOR,
+                        textColor: PURE_WHITE_COLOR),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      Visibility(
+        visible: isLoading,
+        child: Container(
+          color: Colors.black12,
+          child: const Center(
+            child: LoadingWidget(),
+          ),
+        ),
+      )
+    ],
+  ),
+),
         ),
         const Positioned(
             top: 40, right: 0, child: Image(image: AssetImage(REGISTER)))

@@ -13,6 +13,8 @@ class LoginBloc extends ChangeNotifier {
   String email = "";
   String password = "";
 
+  bool isShowPassword = false;
+
   /// Events
   onChangePhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
@@ -36,6 +38,11 @@ class LoginBloc extends ChangeNotifier {
       isLoading = false;
       notifySafety();
     });
+  }
+
+  void toggleShowHidePassword() {
+    isShowPassword = !isShowPassword;
+    notifySafety();
   }
 
   Future<void> onTapLogout() {

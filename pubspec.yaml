@@ -59,6 +59,8 @@ dependencies:
   qr_flutter: ^4.0.0
   file_picker: ^5.2.1
   qr_code_scanner: ^1.0.1
+  flutter_local_notifications: ^15.1.0+1
+  http: ^0.13.3
 
 dev_dependencies:
   flutter_test:

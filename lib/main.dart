@@ -1,13 +1,19 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_installations/firebase_installations.dart';
 import 'package:flutter/material.dart';
 import 'package:we_chat_app/data/model/authentication_model.dart';
 import 'package:we_chat_app/data/model/authentication_model_impl.dart';
 import 'package:we_chat_app/pages/home_screen.dart';
 import 'package:we_chat_app/pages/splash_screen.dart';
 
+import 'FCM/fcm_service.dart';
+
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FCMService().listenForMessages();
+  var firebaseInstallationId = await FirebaseInstallations.id ?? "Unknown Id";
+  debugPrint("Installation Id =======> $firebaseInstallationId");
   runApp( MyApp());
 }
 

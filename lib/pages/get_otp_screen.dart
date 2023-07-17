@@ -20,7 +20,8 @@ class GetOTPScreen extends StatelessWidget {
 
   final TextEditingController textEditingControllerForOTP =
       TextEditingController();
-  final TextEditingController textEditingControllerPhoneNumber = TextEditingController();
+  final TextEditingController textEditingControllerPhoneNumber =
+      TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,18 +70,29 @@ class GetOTPScreen extends StatelessWidget {
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width / 2,
-                            child: InputTextField(
-                              labelName: ENTER_YOUR_PHONE_NUMBER, onChanged: (String val) {  }, textEditingController: textEditingControllerPhoneNumber,
+                            child: Consumer<GetOTPBloc>(
+                              builder: (context, bloc, child) => InputTextField(
+                                labelName: ENTER_YOUR_PHONE_NUMBER,
+                                onChanged: (String val) =>
+                                    bloc.onTapPhoneNumber(val),
+                                textEditingController:
+                                    textEditingControllerPhoneNumber,
+                              ),
                             ),
                           ),
                           const SizedBox(
                             width: MARGIN_LEVEL_1_MIDDLE,
                           ),
-                          const PrimaryButton1(
-                            buttonName: 'Get OTP',
-                            borderColor: TRANSPARENT_COLOR,
-                            buttonColor: PRIMARY_COLOR,
-                            textColor: PURE_WHITE_COLOR,
+                          Consumer<GetOTPBloc>(
+                            builder: (context, bloc, child) => InkWell(
+                              onTap: () => bloc.onTapGetOTP(),
+                              child: PrimaryButton1(
+                                buttonName: 'Get OTP',
+                                borderColor: TRANSPARENT_COLOR,
+                                buttonColor: PRIMARY_COLOR,
+                                textColor: PURE_WHITE_COLOR,
+                              ),
+                            ),
                           )
                         ],
                       ),
@@ -141,9 +153,11 @@ class GetOTPScreen extends StatelessWidget {
                     Consumer<GetOTPBloc>(
                       builder: (context, bloc, child) => Center(
                         child: InkWell(
-                          onTap: () async{
-                           await bloc.onTapVerify();
-                           bloc.isOTPCorrect! ? navigateToScreen(context, RegisterScreen()) : showSnackBarWithMessage(context, "false");
+                          onTap: () async {
+                            await bloc.onTapVerify();
+                            bloc.isOTPCorrect!
+                                ? navigateToScreen(context, RegisterScreen())
+                                : showSnackBarWithMessage(context, "false");
                           },
                           child: const PrimaryButton(
                               buttonName: "Verify",

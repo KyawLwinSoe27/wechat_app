@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -24,14 +23,14 @@ class RegisterBloc extends ChangeNotifier {
   DateTime dateOfBirth = DateTime.now();
   bool isChecked = true;
   File? chooseProfilePicture;
-
+  bool isShowPassword = false;
 
   /// EVENTS
 
-   onImageChoose(File image) {
-     chooseProfilePicture = image;
-     notifySafety();
-   }
+  onImageChoose(File image) {
+    chooseProfilePicture = image;
+    notifySafety();
+  }
 
   void onCheckChange() {
     isChecked = !isChecked;
@@ -62,17 +61,20 @@ class RegisterBloc extends ChangeNotifier {
     dateOfBirthDay = day;
     notifySafety();
   }
+
   void onChangeDateOfBirthMonth(String month) {
     dateOfBirthMonth = month;
     notifySafety();
   }
+
   void onChangeDateOfBirthYear(String year) {
     dateOfBirthYear = year;
     notifySafety();
   }
 
   void onChangedDateOfBirth() {
-    dateOfBirth = DateTime(int.parse(dateOfBirthYear),int.parse(dateOfBirthMonth),int.parse(dateOfBirthDay));
+    dateOfBirth = DateTime(int.parse(dateOfBirthYear),
+        int.parse(dateOfBirthMonth), int.parse(dateOfBirthDay));
     notifySafety();
   }
 
@@ -84,14 +86,15 @@ class RegisterBloc extends ChangeNotifier {
   Future onTapSignUp() {
     showLoading();
     onChangedDateOfBirth();
-    return _model.registerNewUser(
-        email,
-        name,
-       password,
-       phoneNumber,
-       chooseGender,
-        dateOfBirth,
-      chooseProfilePicture).whenComplete(() => hideLoading());
+    return _model
+        .registerNewUser(email, name, password, phoneNumber, chooseGender,
+            dateOfBirth, chooseProfilePicture)
+        .whenComplete(() => hideLoading());
+  }
+
+  void toggleShowHidePassword() {
+    isShowPassword = !isShowPassword;
+    notifySafety();
   }
 
   void showLoading() {

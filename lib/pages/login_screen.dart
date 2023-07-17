@@ -97,12 +97,31 @@ class LoginScreen extends StatelessWidget {
                       Consumer<LoginBloc>(
                         builder: (context, bloc, child) => Container(
                           padding: const EdgeInsets.only(left: 30, right: 30),
-                          child: InputTextField(
-                            labelName: ENTER_YOUR_PASSWORD,
-                            onChanged: (String val) =>
-                                bloc.onChangePassword(val),
-                            textEditingController:
-                                textEditingControllerPassword,
+                          child: Stack(
+                            children: [
+                              TextField(
+                                decoration: const InputDecoration(
+                                  focusedBorder:UnderlineInputBorder(
+                                    borderSide: BorderSide(color: PRIMARY_COLOR),
+                                  ),
+                                  enabledBorder:UnderlineInputBorder(
+                                    borderSide: BorderSide(color: PRIMARY_COLOR),
+                                  ),
+                                  labelText: "Password",
+                                  labelStyle:TextStyle(color: Colors.grey),
+                                ),
+                                keyboardType: TextInputType.text,
+                                textInputAction: TextInputAction.done,
+                                onChanged: (val) => bloc.onChangePassword(val),
+                                obscureText: bloc.isShowPassword,
+                              ),
+                              Positioned(
+                                  top: 20,
+                                  right: 10,
+                                  child: InkWell(
+                                      onTap: () => bloc.toggleShowHidePassword(),
+                                      child: Icon(bloc.isShowPassword ? Icons.remove_red_eye :  Icons.security )))
+                            ],
                           ),
                         ),
                       ),

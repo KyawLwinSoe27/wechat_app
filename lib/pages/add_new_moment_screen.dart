@@ -114,52 +114,46 @@ class AddNewMomentScreen extends StatelessWidget {
                   alignment: Alignment.bottomLeft,
                   child: Row(
                     children: [
-                      Consumer<AddNewMomentBloc>(
-                        builder: (context, bloc, child) => InkWell(
-                          onTap: () async {
-                            FilePickerResult? result = await FilePicker.platform
-                                .pickFiles(allowMultiple: true);
-                            if (result != null) {
-                              bloc.onImageChoose(result.paths.map((path) => File(path!)).toList());
-                            }
-                          },
-                          child: Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(MARGIN_LEVEL_1_LAST),
-                                border: Border.all(color: PRIMARY_COLOR)),
-                            child: const Center(
-                              child: Icon(
-                                Icons.add,
-                                color: PRIMARY_COLOR,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: MARGIN_LEVEL_1_MIDDLE,vertical: MARGIN_LEVEL_1_MIDDLE),
                         height: 100,
-                        width: MediaQuery.of(context).size.width / 1.6,
+                        width: MediaQuery.of(context).size.width - 20,
                         child: Consumer<AddNewMomentBloc>(
                           builder: (context, bloc, child) => ListView.builder(
-                            itemCount: bloc.medias?.length ?? 0,
+                            itemCount: bloc.medias != null ? bloc.medias!.length + 1 : 1,
                             scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, int index) => Container(
-                              margin:
-                                  const EdgeInsets.only(left: MARGIN_LEVEL_1_5),
-                              width: 100,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      MARGIN_LEVEL_1_LAST),
-                                  border: Border.all(color: PRIMARY_COLOR)),
-                              child: Center(
-                                  child: bloc.medias != null
-                                      ? Image.file(bloc.medias![index],fit: BoxFit.fill,)
-                                      : Container(),),
-                            ),
+                            itemBuilder: (context, int index) {
+                              if(index == 0) {
+                                return Consumer<AddNewMomentBloc>(
+                                  builder: (context, bloc, child) => InkWell(
+                                    onTap: () async {
+                                      FilePickerResult? result = await FilePicker.platform
+                                          .pickFiles(allowMultiple: true);
+                                      if (result != null) {
+                                        bloc.onImageChoose(result.paths.map((path) => File(path!)).toList());
+                                      }
+                                    },
+                                    child: Container(
+                                      width: 100,
+                                      height: 100,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(MARGIN_LEVEL_1_LAST),
+                                          border: Border.all(color: PRIMARY_COLOR)),
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.add,
+                                          color: PRIMARY_COLOR,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                              // Subtracting 1 from index to map it to users list
+                              File media = bloc.medias![index - 1];
+                              return MediasListRow(media : media);
+                            }
                           ),
                         ),
                       )
@@ -168,6 +162,32 @@ class AddNewMomentScreen extends StatelessWidget {
                 )
               ],
             )),
+      ),
+    );
+  }
+}
+
+class MediasListRow extends StatelessWidget {
+  final File media;
+  const MediasListRow({
+    super.key,
+    required this.media
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin:
+      const EdgeInsets.only(left: MARGIN_LEVEL_1_5),
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(
+              MARGIN_LEVEL_1_LAST),
+          border: Border.all(color: PRIMARY_COLOR)),
+      child: Center(
+        child: Image.file(
+          media, fit: BoxFit.fill,)
       ),
     );
   }

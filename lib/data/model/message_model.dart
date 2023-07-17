@@ -1,3 +1,4 @@
+import 'package:we_chat_app/data/vos/group_vo.dart';
 import 'package:we_chat_app/data/vos/message_vo.dart';
 
 abstract class MessageModel {
