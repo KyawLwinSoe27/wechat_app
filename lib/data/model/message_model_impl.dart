@@ -26,4 +26,14 @@ class MessageModelImpl extends MessageModel {
     return weChatChatsDataAgent.getMessage(friendId);
   }
 
+  @override
+  Future<void> sendGroupMessage(MessageVO message, String groupId) {
+    return weChatChatsDataAgent.sendGroupMessage(message, groupId);
+  }
+
+  @override
+  Stream<List<MessageVO>> getGroupMessage(String groupId) {
+    return weChatChatsDataAgent.getGroupMessage(groupId);
+  }
+
 }

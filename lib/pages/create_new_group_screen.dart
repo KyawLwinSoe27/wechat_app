@@ -46,7 +46,7 @@ class CreateNewGroup extends StatelessWidget {
           actions: [
             Consumer<CreateNewGroupBloc>(
               builder: (context, bloc, child) => InkWell(
-                onTap: () => bloc.onTapGroupCreate().then((_) => Navigator.pop(context)),
+                onTap: () => bloc.onTapGroupCreate(),
                 child: Container(
                   margin: const EdgeInsets.all(MARGIN_LEVEL_1_MIDDLE),
                   width: 60,

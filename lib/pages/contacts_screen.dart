@@ -67,17 +67,6 @@ class ContactsScreen extends StatelessWidget {
                     height: MARGIN_LEVEL_1_MIDDLE,
                   ),
                   const GroupViewWidget(),
-                  // Consumer<ContactsBloc>(
-                  //   builder: (context, bloc, child) => Container(
-                  //       margin: const EdgeInsets.only(
-                  //         top: MARGIN_LEVEL_1_MIDDLE,
-                  //         left: MARGIN_LEVEL_1_5,
-                  //       ),
-                  //       height: 490,
-                  //       child: ListView.builder(
-                  //           itemCount: bloc.userList.length,
-                  //           itemBuilder: (context, int index) =>  FriendList(friend : bloc.userList[index]))),
-                  // )
                   Consumer<ContactsBloc>(
                     builder: (BuildContext context, bloc, Widget? child) => Row(
                       children: [
@@ -170,7 +159,7 @@ class FriendList extends StatelessWidget {
     return InkWell(
       onTap: () {
         navigateToScreen(
-            context, PeerToPeerChatScreen(friendId: friend.id ?? ""));
+            context, PeerToPeerChatScreen(friendId: friend.id ?? "", type: 'friend',));
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: MARGIN_LEVEL_1_5),
@@ -240,46 +229,49 @@ class GroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-    margin: const EdgeInsets.symmetric(horizontal: MARGIN_LEVEL_1_5),
-    width: 90.0,
-    height: 90.0,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(5.0),
-      color: PURE_WHITE_COLOR,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.5),
-          spreadRadius: 2,
-          blurRadius: 5,
-          offset:
-              const Offset(0, 3), // Offset to create a bottom shadow
-        ),
-      ],
-    ),
-    child: Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: 40,
-            height: 40,
-            child: CircleAvatar(
-              backgroundImage: group.profilePicture != null
-                  ? NetworkImage(group.profilePicture!)
-                  : const NetworkImage(
-                  "https://ca-times.brightspotcdn.com/dims4/default/522c102/2147483647/strip/true/crop/4718x3604+0+0/resize/1200x917!/format/webp/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2F21%2F3491434e446c83711360a43f6978%2Fla-photos-1staff-471763-en-ana-de-armas-mjc-09.jpg"),
-            ),
+    return InkWell(
+      onTap: () => navigateToScreen(context, PeerToPeerChatScreen(friendId: group.id ?? "", type: 'group')),
+      child: Container(
+      margin: const EdgeInsets.symmetric(horizontal: MARGIN_LEVEL_1_5),
+      width: 90.0,
+      height: 90.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5.0),
+        color: PURE_WHITE_COLOR,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset:
+                const Offset(0, 3), // Offset to create a bottom shadow
           ),
-          const SizedBox(
-            height: MARGIN_LEVEL_1_5,
-          ),
-          Text(group.name!)
         ],
       ),
-    ),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 40,
+              height: 40,
+              child: CircleAvatar(
+                backgroundImage: group.profilePicture != null
+                    ? NetworkImage(group.profilePicture!)
+                    : const NetworkImage(
+                    "https://ca-times.brightspotcdn.com/dims4/default/522c102/2147483647/strip/true/crop/4718x3604+0+0/resize/1200x917!/format/webp/quality/80/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Ffd%2F21%2F3491434e446c83711360a43f6978%2Fla-photos-1staff-471763-en-ana-de-armas-mjc-09.jpg"),
+              ),
+            ),
+            const SizedBox(
+              height: MARGIN_LEVEL_1_5,
+            ),
+            Text(group.name!)
+          ],
+        ),
+      ),
 
-          );
+            ),
+    );
   }
 }
 

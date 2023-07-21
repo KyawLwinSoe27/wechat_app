@@ -6,8 +6,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:we_chat_app/data/vos/group_vo.dart';
 import 'package:we_chat_app/data/vos/message_vo.dart';
-import 'package:we_chat_app/data/vos/user_vo.dart';
 import 'package:we_chat_app/network/wechat_chats_data_agent.dart';
+
+import 'notification_send.dart';
 
 /// MESSAGE MAIN NODE
 const messageDatabase = "contactsAndMessaging";
@@ -46,7 +47,6 @@ class WeChatChatsDataAgentImpl extends WeChatChatsDataAgent {
         .child(message.senderId ?? "")
         .child(message.id ?? "")
         .set(message.toJson());
-    print("Message Added Successful");
   }
 
   @override
@@ -58,15 +58,26 @@ class WeChatChatsDataAgentImpl extends WeChatChatsDataAgent {
         .orderByKey()
         .onValue
         .map((event) {
-      Map<Object?, Object?> snapshotValue =
-          event.snapshot.value as Map<Object?, Object?>;
-      Map<String?, dynamic> convertedMap = {};
+      List<MessageVO> messages = [];
+      Map<dynamic, dynamic> snapshotValue =
+          event.snapshot.value as Map<dynamic, dynamic>;
+
+      if (snapshotValue == null) {
+        // Return an empty list if the snapshotValue is null
+        return [];
+      }
+
       snapshotValue.forEach((key, value) {
-        convertedMap[key.toString()] = value;
+        // Assuming key is the messageId
+        // Add the messageId to the value map to be used by MessageVO.fromJson
+        value['messageId'] = key;
+        messages.add(MessageVO.fromJson(Map<String, dynamic>.from(value)));
       });
-      return (convertedMap.values).map<MessageVO>((e) {
-        return MessageVO.fromJson(Map<String, dynamic>.from(e));
-      }).toList();
+
+      // Sort the messages based on messageId (timestamp)
+      messages.sort((a, b) => b.id!.compareTo(a.id!));
+      getChatMessageUser();
+      return messages;
     });
   }
 
@@ -76,6 +87,7 @@ class WeChatChatsDataAgentImpl extends WeChatChatsDataAgent {
         .child(messageDatabase)
         .child(firebaseAuth.currentUser?.uid ?? "")
         .onValue;
+    print(databaseStream);
     return databaseStream.map((event) {
       List<String> documentList = [];
 
@@ -128,7 +140,7 @@ class WeChatChatsDataAgentImpl extends WeChatChatsDataAgent {
               profilePicture: groupObject['profile_picture'],
               members: List<String>.from(
                   groupObject["members"]?.cast<String>() ?? []),
-              messages: groupObject["messages"],
+              messages: [],
               // Add other properties as needed.
             );
             groupsForMember.add(group);
@@ -136,6 +148,61 @@ class WeChatChatsDataAgentImpl extends WeChatChatsDataAgent {
         });
       }
       return groupsForMember;
+    });
+  }
+
+  @override
+  Stream<GroupVO> getGroupById(String groupId) {
+    return databaseRef
+        .child(groupDatabase)
+        .child(groupId)
+        .once()
+        .asStream()
+        .map((snapShot) {
+      return GroupVO.fromJson(
+        Map<String, dynamic>.from(snapShot.snapshot.value as dynamic),
+      );
+    });
+  }
+
+  @override
+  Future<void> sendGroupMessage(MessageVO message, String groupId) {
+    return databaseRef
+        .child(groupDatabase)
+        .child(groupId)
+        .child('messages')
+        .push()
+        .set(message.toJson());
+  }
+
+  @override
+  Stream<List<MessageVO>> getGroupMessage(String groupId) {
+    return databaseRef
+        .child(groupDatabase)
+        .child(groupId)
+        .child('messages')
+        .onValue
+        .map((event) {
+      List<MessageVO> messages = [];
+      Map<dynamic, dynamic> snapshotValue =
+          event.snapshot.value as Map<dynamic, dynamic>;
+
+      if (snapshotValue == null) {
+        // Return an empty list if the snapshotValue is null
+        return [];
+      }
+
+      snapshotValue.forEach((key, value) {
+        // Assuming key is the messageId
+        // Add the messageId to the value map to be used by MessageVO.fromJson
+        value['messageId'] = key;
+        messages.add(MessageVO.fromJson(Map<String, dynamic>.from(value)));
+      });
+
+      // Sort the messages based on messageId (timestamp)
+      messages.sort((a, b) => b.id!.compareTo(a.id!));
+
+      return messages;
     });
   }
 }

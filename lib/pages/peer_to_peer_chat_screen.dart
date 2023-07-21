@@ -7,14 +7,14 @@ import 'package:we_chat_app/resources/dimensions.dart';
 
 class PeerToPeerChatScreen extends StatelessWidget {
   final String friendId;
-
-  const PeerToPeerChatScreen({Key? key, required this.friendId})
+  final String type;
+  const PeerToPeerChatScreen({Key? key, required this.friendId, required this.type})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (BuildContext context) => PeerToPeerChatBloc(friendId),
+      create: (BuildContext context) => PeerToPeerChatBloc(friendId, type),
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: BACKGROUND_COLOR,

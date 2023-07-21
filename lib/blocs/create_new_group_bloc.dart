@@ -4,10 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:we_chat_app/data/model/contact_model.dart';
 import 'package:we_chat_app/data/model/contact_model_impl.dart';
-import 'package:we_chat_app/data/vos/group_vo.dart';
 import 'package:we_chat_app/data/vos/user_vo.dart';
-
-import '../data/model/authentication_model.dart';
 
 class CreateNewGroupBloc extends ChangeNotifier {
   /// STATES
@@ -77,9 +74,9 @@ class CreateNewGroupBloc extends ChangeNotifier {
   Future<void> onTapGroupCreate() async{
     showLoading();
     if(selectedUserList.isNotEmpty) {
-      selectedUserList.forEach((element) {
+      for (var element in selectedUserList) {
         selectedUserId.add(element.id!);
-      });
+      }
       _model.createGroup(groupName, chooseProfilePicture, selectedUserId).whenComplete(() => hideLoading());
     }
   }

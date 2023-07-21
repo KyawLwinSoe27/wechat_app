@@ -10,4 +10,5 @@ abstract class ContactModel {
   Stream<List<UserVO>> getFriendsList();
   Future<void> createGroup(String groupName, File? groupPicture,List<String> members);
   Stream<List<GroupVO>> getGroupList();
+  Stream<GroupVO> getGroupById(String groupId);
 }

@@ -12,10 +12,20 @@ GroupVO _$GroupVOFromJson(Map<String, dynamic> json) => GroupVO(
       profilePicture: json['profile_picture'] as String?,
       members:
           (json['members'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      messages: (json['messages'] as List<dynamic>?)
-          ?.map((e) => MessageVO.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      messages: _parseMessages(json['messages']),
     );
+
+List<MessageVO> _parseMessages(dynamic messagesData) {
+  List<MessageVO> messages = [];
+  if (messagesData is List) {
+    messages = messagesData
+        .map((e) => MessageVO.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
+  } else if (messagesData is Map) {
+    messages = [MessageVO.fromJson(Map<String, dynamic>.from(messagesData))];
+  }
+  return messages;
+}
 
 Map<String, dynamic> _$GroupVOToJson(GroupVO instance) => <String, dynamic>{
       'id': instance.id,

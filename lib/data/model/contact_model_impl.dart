@@ -57,4 +57,9 @@ class ContactModelImpl extends ContactModel {
     return weChatChatsDataAgent.getGroupList();
   }
 
+  @override
+  Stream<GroupVO> getGroupById(String groupId) {
+    return weChatChatsDataAgent.getGroupById(groupId);
+  }
+
 }

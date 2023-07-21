@@ -12,4 +12,7 @@ abstract class WeChatChatsDataAgent {
   Future<void> createGroup(GroupVO group);
   Future<String> uploadGroupProfilePictureToFirebase(File imageFile, String groupId);
   Stream<List<GroupVO>> getGroupList();
+  Stream<GroupVO> getGroupById(String groupId);
+  Future<void> sendGroupMessage(MessageVO message, String groupId);
+  Stream<List<MessageVO>> getGroupMessage(String groupId);
 }
