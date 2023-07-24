@@ -13,7 +13,7 @@ class LoginBloc extends ChangeNotifier {
   String email = "";
   String password = "";
 
-  bool isShowPassword = false;
+  bool isShowPassword = true;
 
   /// Events
   onChangePhoneNumber(String phoneNumber) {

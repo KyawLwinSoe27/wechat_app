@@ -1,4 +1,7 @@
 
+import 'dart:io';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:we_chat_app/data/model/authentication_model.dart';
 import 'package:we_chat_app/data/model/authentication_model_impl.dart';
@@ -17,8 +20,9 @@ class ProfileBloc extends ChangeNotifier {
   String dateOfBirthYear = "";
   DateTime dateOfBirth = DateTime.now();
   int chooseGender = 0;
-  String profilePicture = "";
+  String? profilePicture;
   UserVO? loggedInUser;
+  File? chooseProfilePicture;
 
   final AuthenticationModel _model = AuthenticationModelImpl();
 
@@ -87,6 +91,24 @@ class ProfileBloc extends ChangeNotifier {
   //   return _model.registerNewUser(userVO).whenComplete(() => hideLoading());
   // }
 
+  onImageChoose(File image) {
+    chooseProfilePicture = image;
+    notifySafety();
+    if(chooseProfilePicture != null) {
+      _model.updateUserInfo(loggedInUser?.id ?? "", email, userName, loggedInUser?.password ?? "", phoneNumber, chooseGender, dateOfBirth, chooseProfilePicture, loggedInUser?.deviceToken ?? "").then((_) {
+        _model.getCurrentUserInfo().listen((user) {
+          userName = user.name ?? "";
+          email = user.email ?? "";
+          phoneNumber = user.phoneNumber ?? "";
+          dateOfBirth = user.dateOfBirth ?? DateTime.now();
+          chooseGender = user.gender ?? -1;
+          profilePicture = user.profilePicture ?? "";
+          loggedInUser = user;
+          notifySafety();
+        });
+      });
+    }
+  }
 
   void showLoading() {
     isLoading = true;

@@ -16,6 +16,7 @@ const groupDatabase = "group";
 
 /// STORAGE
 const groupPhotos = "group_photos";
+const messagePhotos = "message_photos";
 
 class WeChatChatsDataAgentImpl extends WeChatChatsDataAgent {
   static final WeChatChatsDataAgentImpl _singleton =
@@ -76,30 +77,53 @@ class WeChatChatsDataAgentImpl extends WeChatChatsDataAgent {
 
       // Sort the messages based on messageId (timestamp)
       messages.sort((a, b) => b.id!.compareTo(a.id!));
-      getChatMessageUser();
       return messages;
     });
   }
 
-  @override
-  Stream<List<String>> getChatMessageUser() {
-    Stream databaseStream = databaseRef
-        .child(messageDatabase)
-        .child(firebaseAuth.currentUser?.uid ?? "")
-        .onValue;
-    print(databaseStream);
-    return databaseStream.map((event) {
-      List<String> documentList = [];
+  // @override
+  // Stream<List<String>> getChatMessageUser() {
+  //   return databaseRef
+  //       .child('contactsAndMessaging')
+  //       .child(firebaseAuth.currentUser?.uid ?? "")
+  //       .onValue
+  //       .map((event) {
+  //     DataSnapshot snapshot = event.snapshot;
+  //     List<String> stringList = [];
+  //     Map<dynamic, dynamic>? contactsAndMessagingData =
+  //     snapshot.value as Map<dynamic, dynamic>?;
+  //
+  //     if (contactsAndMessagingData != null) {
+  //       contactsAndMessagingData.forEach((key, value) {
+  //         stringList.add(key.toString());
+  //       });
+  //     }
+  //
+  //     return stringList;
+  //   });
+  // }
 
-      Map<dynamic, dynamic> values = event.snapshot.value;
+  Future<List<String>> getChatMessageUser() async {
+    DatabaseEvent event =
+    await databaseRef.child('contactsAndMessaging').child(firebaseAuth.currentUser?.uid ?? "").once();
 
-      values.forEach((key, value) {
-        documentList.add(value.toString());
+    DataSnapshot snapshot = event.snapshot;
+
+    List<String> stringList = [];
+
+    Map<dynamic, dynamic>? contactsAndMessagingData =
+    snapshot.value as Map<dynamic, dynamic>?;
+
+    if (contactsAndMessagingData != null) {
+      contactsAndMessagingData.forEach((key, value) {
+        stringList.add(key);
       });
+    }
 
-      return documentList;
-    });
+    return stringList;
   }
+
+
 
   @override
   Future<void> createGroup(GroupVO group) async {
@@ -204,5 +228,15 @@ class WeChatChatsDataAgentImpl extends WeChatChatsDataAgent {
 
       return messages;
     });
+  }
+
+  @override
+  Future<String> uploadImageToFirebase(File imageFile, String senderId, String receiverId) {
+    DateTime timestamp = DateTime.now();
+    return firebaseStorage
+        .ref()
+        .child("$messagePhotos/$senderId/$receiverId/$timestamp")
+        .putFile(imageFile)
+        .then((taskSnapshot) => taskSnapshot.ref.getDownloadURL());
   }
 }

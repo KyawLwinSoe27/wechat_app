@@ -69,6 +69,32 @@ class AuthenticationModelImpl extends AuthenticationModel {
     return Future.value(newUser);
   }
 
+  Future<UserVO> updateCraftUserVO(
+      String id,
+      String email,
+      String userName,
+      String password,
+      String profilePicture,
+      String phoneNumber,
+      int gender,
+      DateTime chooseDOB,
+      String deviceToken
+      ) {
+    var newUser = UserVO(
+        id: id,
+        name: userName,
+        email: email,
+        phoneNumber: phoneNumber,
+        password: password,
+        profilePicture: profilePicture,
+        dateOfBirth: chooseDOB,
+        gender: gender,
+        deviceToken: deviceToken
+    );
+
+    return Future.value(newUser);
+  }
+
   // @override
   // Future<void> registerNewUser(UserVO userVO) {
   //   return craftUserVO(
@@ -126,5 +152,21 @@ class AuthenticationModelImpl extends AuthenticationModel {
   @override
   Future<void> logOut() {
     return mDataAgent.logout();
+  }
+
+  @override
+  Future<void> updateUserInfo(String id ,String email, String userName, String password, String phoneNumber, int gender, DateTime chooseDOB, File? userProfilePicture, String deviceToken) {
+    if (userProfilePicture != null) {
+      return mDataAgent
+          .uploadProfilePictureToFirebase(userProfilePicture)
+          .then((downloadUrl) {
+        return updateCraftUserVO(id, email, userName, password, downloadUrl, phoneNumber,
+            gender, chooseDOB, deviceToken)
+            .then((user) => mDataAgent.updateUserInfo(user));
+      });
+    }
+    return updateCraftUserVO(
+        id, email, userName, password, "", phoneNumber, gender, chooseDOB, deviceToken)
+        .then((user) => mDataAgent.updateUserInfo(user));
   }
 }

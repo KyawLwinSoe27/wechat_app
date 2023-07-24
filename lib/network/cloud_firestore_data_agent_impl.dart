@@ -219,4 +219,12 @@ class CloudFireStoreDataAgentImpl extends WeChatDataAgent {
       return false;
     }
   }
+
+  @override
+  Future updateUserInfo(UserVO userVO) {
+    return fireStore
+        .collection(userCollection)
+        .doc(userVO.id)
+        .set(userVO.toJson());
+  }
 }

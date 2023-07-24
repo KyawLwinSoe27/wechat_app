@@ -17,4 +17,15 @@ abstract class AuthenticationModel {
   Future<void> logOut();
   Stream<UserVO> getCurrentUserInfo();
   Stream<UserVO> getCurrentUserInfoById(String id);
+  Future<void> updateUserInfo(
+      String id,
+      String email,
+      String userName,
+      String password,
+      String phoneNumber,
+      int gender,
+      DateTime chooseDOB,
+      File? userProfilePicture,
+      String deviceToken,
+      );
 }

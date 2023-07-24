@@ -1,18 +1,20 @@
+import 'dart:io';
+
 import 'package:datepicker_dropdown/datepicker_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:we_chat_app/blocs/profile_bloc.dart';
 import 'package:we_chat_app/resources/colors.dart';
 import 'package:we_chat_app/resources/dimensions.dart';
 import 'package:we_chat_app/resources/images.dart';
 import 'package:we_chat_app/resources/strings.dart';
-import 'package:we_chat_app/viewitems/post_item.dart';
 import 'package:we_chat_app/widgets/input_text_field.dart';
 import 'package:we_chat_app/widgets/primary_button.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class ProfileScreen extends StatelessWidget {
-  ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -402,9 +404,7 @@ class ProfilePhotoWidget extends StatelessWidget {
             child: CircleAvatar(
               radius: 20, // Image radius
               backgroundImage: NetworkImage(
-                bloc.profilePicture == ""
-                    ? 'https://i.redd.it/dry65gj3b8a31.jpg'
-                    : bloc.profilePicture,
+                bloc.profilePicture != null ? bloc.profilePicture! : 'https://i.redd.it/dry65gj3b8a31.jpg' ,
               ),
             ),
           ),
@@ -423,7 +423,8 @@ class ProfilePhotoWidget extends StatelessWidget {
                             return AlertDialog(
                               title: const Text('Scan Me To Make Friend'),
                               content: Container(
-                                margin: const EdgeInsets.only(left: 15.0,top: 5.0),
+                                margin:
+                                    const EdgeInsets.only(left: 15.0, top: 5.0),
                                 width: 200,
                                 height: 200,
                                 child: QrImage(
@@ -435,7 +436,8 @@ class ProfilePhotoWidget extends StatelessWidget {
                                 TextButton(
                                   child: Text('OK'),
                                   onPressed: () {
-                                    Navigator.of(context).pop(); // Close the dialog
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
                                   },
                                 ),
                               ],
@@ -451,13 +453,25 @@ class ProfilePhotoWidget extends StatelessWidget {
                   ),
                 )
               : Container(),
-          const Positioned(
+          Positioned(
             bottom: 0,
             left: 0,
-            child: Icon(
-              Icons.image_outlined,
-              size: 30,
-              color: Colors.white,
+            child: Consumer<ProfileBloc>(
+              builder: (context, bloc, child) => InkWell(
+                onTap: () async{
+                  final ImagePicker picker = ImagePicker();
+                  final XFile? image = await picker.pickImage(
+                      source: ImageSource.gallery);
+                  if(image != null) {
+                    bloc.onImageChoose(File(image.path));
+                  }
+                },
+                child: const Icon(
+                  Icons.image_outlined,
+                  size: 30,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
         ],

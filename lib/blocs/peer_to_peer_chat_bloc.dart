@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:we_chat_app/data/model/authentication_model.dart';
 import 'package:we_chat_app/data/model/authentication_model_impl.dart';
@@ -32,6 +34,9 @@ class PeerToPeerChatBloc extends ChangeNotifier {
   /// GROUP
   GroupVO? groupVO;
   bool? isGroup;
+
+  File? chooseImage;
+
 
   final AuthenticationModel _model = AuthenticationModelImpl();
   final MessageModel _messageModel = MessageModelImpl();
@@ -76,26 +81,52 @@ class PeerToPeerChatBloc extends ChangeNotifier {
   }
 
   Future<void> sendMessage() async{
-    if(textMessage != "") {
+    if(chooseImage != null) {
       String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
       MessageVO messageVO = MessageVO(
-        id: timestamp,
+          id: timestamp,
           file: "",
           message: textMessage,
           senderName: currentUserVO?.name,
           senderProfilePicture: currentUserVO?.profilePicture,
           timestamp: timestamp,
           senderId: currentUserVO?.id);
-       if(!isGroup!) {
-         _messageModel.sendMessage(messageVO, friendUserVO?.id ?? "");
-         sendNotification.sendNotification(friendUserVO?.deviceToken ?? "", "WeChat App Receive Message From $userName", textMessage);
-       } else {
-         _messageModel.sendGroupMessage(messageVO, groupVO?.id ?? "");
-       }
+      if(!isGroup!) {
+        await _messageModel.sendMessage(messageVO, friendUserVO?.id ?? "", chooseImage);
+        removeImage();
+        sendNotification.sendNotification(friendUserVO?.deviceToken ?? "", "WeChat App Receive Message From $userName", textMessage);
+      } else {
+        _messageModel.sendGroupMessage(messageVO, groupVO?.id ?? "");
+      }
+    } else {
+      if(textMessage != "") {
+        String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+        MessageVO messageVO = MessageVO(
+            id: timestamp,
+            file: "",
+            message: textMessage,
+            senderName: currentUserVO?.name,
+            senderProfilePicture: currentUserVO?.profilePicture,
+            timestamp: timestamp,
+            senderId: currentUserVO?.id);
+        if(!isGroup!) {
+          _messageModel.sendMessage(messageVO, friendUserVO?.id ?? "", null);
+          sendNotification.sendNotification(friendUserVO?.deviceToken ?? "", "WeChat App Receive Message From $userName", textMessage);
+        } else {
+          _messageModel.sendGroupMessage(messageVO, groupVO?.id ?? "");
+        }
+      }
     }
   }
+  onImageChoose(File image) {
+    chooseImage = image;
+    notifySafety();
+  }
 
-  
+  removeImage() {
+    chooseImage = null;
+    notifySafety();
+  }
 
   void onTextChanged(String text) {
     textMessage = text;
